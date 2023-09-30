@@ -1,4 +1,6 @@
-﻿namespace LibraryWebAPI.Services.LibraryService
+﻿using Microsoft.VisualBasic;
+
+namespace LibraryWebAPI.Services.LibraryService
 {
     public class LibraryService : ILibraryService
     {
@@ -16,25 +18,42 @@
             return await _context.Libraries.ToListAsync();
         }
 
-        public List<Library> DeleteLibrary(Guid guid)
+        public async Task<List<Library>> DeleteLibrary(Guid guid)
         {
-            throw new NotImplementedException();
+            var library = await _context.Libraries.FindAsync(guid);
+            if (library is null)
+                return null;
+
+            _context.Libraries.Remove(library);
+            await _context.SaveChangesAsync();
+
+            return await _context.Libraries.ToListAsync();
         }
 
-        public async Task<List<Library>> GetAll()
+        public async Task<List<Library>> GetAllLibraries()
         {
             var libraries = await _context.Libraries.ToListAsync();
             return libraries;
         }
 
-        public Library GetById(Guid guid)
+        public async Task<Library> GetLibraryById(Guid guid)
         {
-            throw new NotImplementedException();
+            var library = await _context.Libraries.FindAsync(guid);
+            return library;
         }
 
-        public List<Library> UpdateLibrary(Guid guid, Library library)
+        public async Task<List<Library>> UpdateLibrary(Guid guid, Library request)
         {
-            throw new NotImplementedException();
+            var library = await _context.Libraries.FindAsync(guid);
+            if (library is null)
+                return null;
+
+            library.Name = request.Name;
+            library.IsDeleted = request.IsDeleted;
+
+            await _context.SaveChangesAsync();
+
+            return await _context.Libraries.ToListAsync();
         }
     }
 }

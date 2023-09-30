@@ -2,11 +2,11 @@
 {
     public interface ILibraryService
     {
-        Task<List<Library>> GetAll();
-        Library GetById(Guid guid);
+        Task<List<Library>> GetAllLibraries();
+        Task<Library> GetLibraryById(Guid guid);
         Task<List<Library>> AddLibrary(Library library);
-        List<Library> UpdateLibrary(Guid guid, Library library);
-        List<Library> DeleteLibrary(Guid guid);
+        Task<List<Library>> UpdateLibrary(Guid guid, Library request);
+        Task<List<Library>> DeleteLibrary(Guid guid);
 
     }
 }

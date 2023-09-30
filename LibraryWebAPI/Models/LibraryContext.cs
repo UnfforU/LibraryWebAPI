@@ -92,7 +92,11 @@ public partial class LibraryContext : DbContext
             entity.Property(e => e.LibraryId)
                 .HasDefaultValue(new Guid())
                 .HasColumnName("libraryId");
-            entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
+
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("isDeleted");
+
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false)
