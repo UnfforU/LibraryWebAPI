@@ -1,5 +1,5 @@
-using LibraryWebAPI.Models;
-using Microsoft.EntityFrameworkCore;
+
+using LibraryWebAPI.Services.LibraryService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +9,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<ILibraryService, LibraryService>();
 
 builder.Services.AddDbContext<LibraryContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 
 namespace LibraryWebAPI.Models;
 
@@ -24,8 +23,9 @@ public partial class LibraryContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-760IB35;Database=library;Trusted_Connection=True;TrustServerCertificate=True");
+    {
+
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -90,7 +90,7 @@ public partial class LibraryContext : DbContext
             entity.ToTable("library");
 
             entity.Property(e => e.LibraryId)
-                .ValueGeneratedNever()
+                .HasDefaultValue(new Guid())
                 .HasColumnName("libraryId");
             entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
             entity.Property(e => e.Name)
