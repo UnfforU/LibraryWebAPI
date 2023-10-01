@@ -1,6 +1,8 @@
 
 using LibraryWebAPI.Common;
+using LibraryWebAPI.Services.AuthorService;
 using LibraryWebAPI.Services.AuthService;
+using LibraryWebAPI.Services.BookService;
 using LibraryWebAPI.Services.LibraryService;
 using LibraryWebAPI.Services.UserService;
 
@@ -18,6 +20,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ILibraryService, LibraryService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
 
 builder.Services.AddDbContext<LibraryContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));

@@ -46,16 +46,16 @@ public partial class LibraryContext : DbContext
         {
             entity.ToTable("book");
 
-            entity.HasIndex(e => e.Author, "IXFK_book_author");
+            entity.HasIndex(e => e.AuthorId, "IXFK_book_author");
 
-            entity.HasIndex(e => e.Library, "IXFK_book_library");
+            entity.HasIndex(e => e.LibraryId, "IXFK_book_library");
 
-            entity.HasIndex(e => e.Owner, "IXFK_book_user");
+            entity.HasIndex(e => e.OwnerId, "IXFK_book_user");
 
             entity.Property(e => e.BookId)
                 .HasDefaultValue(new Guid())
                 .HasColumnName("bookId");
-            entity.Property(e => e.Author).HasColumnName("author");
+            entity.Property(e => e.AuthorId).HasColumnName("author");
             entity.Property(e => e.BookedDate).HasColumnName("bookedDate");
             entity.Property(e => e.Description)
                 .HasMaxLength(200)
@@ -63,25 +63,25 @@ public partial class LibraryContext : DbContext
                 .HasColumnName("description");
             entity.Property(e => e.IsBooked).HasColumnName("isBooked");
             entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
-            entity.Property(e => e.Library).HasColumnName("library");
+            entity.Property(e => e.LibraryId).HasColumnName("library");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("name");
-            entity.Property(e => e.Owner).HasColumnName("owner");
+            entity.Property(e => e.OwnerId).HasColumnName("owner");
 
             entity.HasOne(d => d.AuthorNavigation).WithMany(p => p.Books)
-                .HasForeignKey(d => d.Author)
+                .HasForeignKey(d => d.AuthorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_book_author");
 
             entity.HasOne(d => d.LibraryNavigation).WithMany(p => p.Books)
-                .HasForeignKey(d => d.Library)
+                .HasForeignKey(d => d.LibraryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_book_library");
 
             entity.HasOne(d => d.OwnerNavigation).WithMany(p => p.Books)
-                .HasForeignKey(d => d.Owner)
+                .HasForeignKey(d => d.OwnerId)
                 .HasConstraintName("FK_book_user");
         });
 

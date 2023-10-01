@@ -24,7 +24,8 @@ namespace LibraryWebAPI.Services.LibraryService
             if (library is null)
                 return null;
 
-            _context.Libraries.Remove(library);
+            library.IsDeleted = true;
+            _context.Entry(library).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
             return await _context.Libraries.ToListAsync();

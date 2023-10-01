@@ -24,7 +24,7 @@ namespace LibraryWebAPI.Controllers
 
         //GET: api/Book/guid
         [HttpGet("{libraryId}")]
-        public async Task<ActionResult<List<Book>>> GetBooksInLibrary(Guid libraryId)
+        public async Task<ActionResult<List<BookDTO>>> GetBooksInLibrary(Guid libraryId)
         {
             return await _bookService.GetAllBooksInLibrary(libraryId);
         }
@@ -77,33 +77,20 @@ namespace LibraryWebAPI.Controllers
         //    return NoContent();
         //}
 
-        //// POST: api/Book
-        //[HttpPost]
-        //public async Task<ActionResult<Book>> PostBook(Book book)
-        //{
-        //  if (_context.Books == null)
-        //  {
-        //      return Problem("Entity set 'LibraryContext.Books'  is null.");
-        //  }
-        //    _context.Books.Add(book);
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateException)
-        //    {
-        //        if (BookExists(book.BookId))
-        //        {
-        //            return Conflict();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return CreatedAtAction("GetBook", new { id = book.BookId }, book);
-        //}
+        // POST: api/Book
+        [HttpPost]
+        public async Task<ActionResult<BookDTO>> AddBook(BookDTO book)
+        {
+            await _bookService.AddBook(book);
+            if(book != null)
+            {
+                return Ok(book);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
 
         //// DELETE: api/Book/5
         //[HttpDelete("{id}")]

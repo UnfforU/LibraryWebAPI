@@ -2,10 +2,10 @@
 {
     public interface IBookService
     {
-        Task<List<Book>> GetAllBooksInLibrary(Guid libraryId);
-        Task<Book?> GetBookById(Guid bookId);
-        Task<Book?> AddBook(Book book);
-        Task<Book?> UpdateBook(Guid bookId, Book request);
-        Task<List<Book>> DeleteBook(Guid bookId);
+        Task<List<BookDTO>> GetAllBooksInLibrary(Guid libraryId);
+        Task<BookDTO?> GetBookById(Guid bookId);
+        Task<BookDTO?> AddBook(BookDTO book);
+        Task<BookDTO?> UpdateBook(Guid bookId, BookDTO request);
+        Task<List<BookDTO>> DeleteBook(Guid bookId);
     }
 }

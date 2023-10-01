@@ -9,17 +9,17 @@ public partial class Book
 
     public string Name { get; set; } = null!;
 
-    public Guid Author { get; set; }
+    public Guid AuthorId { get; set; }
 
     public string? Description { get; set; }
 
-    public Guid Library { get; set; }
+    public Guid LibraryId { get; set; }
 
     public bool? IsDeleted { get; set; }
 
     public bool? IsBooked { get; set; }
 
-    public Guid? Owner { get; set; }
+    public Guid? OwnerId { get; set; }
 
     public DateTime? BookedDate { get; set; }
 
