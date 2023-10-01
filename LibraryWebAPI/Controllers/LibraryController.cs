@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using LibraryWebAPI.Services.LibraryService;
 using Microsoft.AspNetCore.Http;
@@ -40,7 +41,7 @@ namespace LibraryWebAPI.Controllers
 
         // PUT: api/Library/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateLibrary(Guid id, Library request)
+        public async Task<ActionResult<Library>> UpdateLibrary(Guid id, Library request)
         {
             var result = await _libraryService.UpdateLibrary(id, request);
             if (result is null)
@@ -59,7 +60,7 @@ namespace LibraryWebAPI.Controllers
 
         // DELETE: api/Library/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLibrary(Guid id)
+        public async Task<ActionResult<Library>> DeleteLibrary(Guid id)
         {
             var result = await _libraryService.DeleteLibrary(id);
             if (result is null)

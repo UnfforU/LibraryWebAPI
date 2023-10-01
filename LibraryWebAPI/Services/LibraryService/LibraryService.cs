@@ -11,11 +11,11 @@ namespace LibraryWebAPI.Services.LibraryService
             this._context = context;
         }
 
-        public async Task<List<Library>> AddLibrary(Library library)
+        public async Task<Library?> AddLibrary(Library library)
         {
             _context.Libraries.Add(library);
             await _context.SaveChangesAsync();
-            return await _context.Libraries.ToListAsync();
+            return await _context.Libraries.FindAsync(library.LibraryId);
         }
 
         public async Task<List<Library>> DeleteLibrary(Guid guid)
@@ -36,13 +36,13 @@ namespace LibraryWebAPI.Services.LibraryService
             return libraries;
         }
 
-        public async Task<Library> GetLibraryById(Guid guid)
+        public async Task<Library?> GetLibraryById(Guid guid)
         {
             var library = await _context.Libraries.FindAsync(guid);
             return library;
         }
 
-        public async Task<List<Library>> UpdateLibrary(Guid guid, Library request)
+        public async Task<Library?> UpdateLibrary(Guid guid, Library request)
         {
             var library = await _context.Libraries.FindAsync(guid);
             if (library is null)
@@ -53,7 +53,7 @@ namespace LibraryWebAPI.Services.LibraryService
 
             await _context.SaveChangesAsync();
 
-            return await _context.Libraries.ToListAsync();
+            return await _context.Libraries.FindAsync(guid);
         }
     }
 }
