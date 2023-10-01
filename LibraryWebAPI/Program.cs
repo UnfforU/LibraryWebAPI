@@ -1,5 +1,6 @@
 
 using LibraryWebAPI.Services.LibraryService;
+using LibraryWebAPI.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ILibraryService, LibraryService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddDbContext<LibraryContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
