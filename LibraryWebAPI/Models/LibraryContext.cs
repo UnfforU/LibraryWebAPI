@@ -108,7 +108,7 @@ public partial class LibraryContext : DbContext
             entity.ToTable("user");
 
             entity.Property(e => e.UserId)
-                .ValueGeneratedNever()
+                .HasDefaultValue(new Guid())
                 .HasColumnName("userId");
             entity.Property(e => e.IsAdmin).HasColumnName("isAdmin");
             entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
@@ -117,7 +117,7 @@ public partial class LibraryContext : DbContext
                 .IsUnicode(false)
                 .IsFixedLength()
                 .HasColumnName("password");
-            entity.Property(e => e.UserName)
+            entity.Property(e => e.Username)
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("username");
