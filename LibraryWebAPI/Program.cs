@@ -1,4 +1,6 @@
 
+using LibraryWebAPI.Common;
+using LibraryWebAPI.Services.AuthService;
 using LibraryWebAPI.Services.LibraryService;
 using LibraryWebAPI.Services.UserService;
 
@@ -7,12 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection("Auth"));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ILibraryService, LibraryService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddDbContext<LibraryContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));

@@ -7,6 +7,8 @@ namespace LibraryWebAPI.Services.UserService
         Task<List<User>> AddUser(UserDTO user);
         Task<List<User>> DeleteUser(Guid userId);
 
+        User? GetUserByLoginData(Login login);
+
         //Task<User?> GetBookById(Guid bookId);
         
         //Task<Book?> UpdateBook(Guid bookId, Book request);

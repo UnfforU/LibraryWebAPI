@@ -11,7 +11,7 @@ namespace LibraryWebAPI.Services.UserService
             this._context = context;
         }
 
-        public async Task<List<UserDTO>> AddUser(UserDTO userDTO)
+        public async Task<List<User>> AddUser(UserDTO userDTO)
         {
             var newUser = new User
             {
@@ -33,11 +33,19 @@ namespace LibraryWebAPI.Services.UserService
             if (user is null)
                 return null;
 
-            _context.Users.Remove(user);
+            user.IsDeleted = true;
+            _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
             return await _context.Users.ToListAsync();
         }
+
+        public User? GetUserByLoginData(Login login) =>
+            _context.Users.SingleOrDefault(u => 
+                (u.UserName == login.UserName) 
+                && (u.Password == ComputeSHA256(login.Password)));
+    
+           
 
         private string ComputeSHA256(string input)
         {
