@@ -23,27 +23,27 @@ namespace LibraryWebAPI.Controllers
 
         // GET: api/Library
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Library>>> GetLibraries()
+        public async Task<ActionResult<List<Library>>> GetLibraries()
         {
             return await _libraryService.GetAllLibraries();
         }
 
-        // GET: api/Library/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Library>> GetLibraryById(Guid id)
+        // GET: api/Library/guid
+        [HttpGet("{libraryId}")]
+        public async Task<ActionResult<Library>> GetLibraryById(Guid libraryId)
         {
-            var result = await _libraryService.GetLibraryById(id);
+            var result = await _libraryService.GetLibraryById(libraryId);
             if (result is null)
                 return NotFound("Hero not found.");
 
             return Ok(result);
         }
 
-        // PUT: api/Library/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Library>> UpdateLibrary(Guid id, Library request)
+        // PUT: api/Library/guid
+        [HttpPut("{libraryId}")]
+        public async Task<ActionResult<Library>> UpdateLibrary(Guid libraryId, Library request)
         {
-            var result = await _libraryService.UpdateLibrary(id, request);
+            var result = await _libraryService.UpdateLibrary(libraryId, request);
             if (result is null)
                 return NotFound("Hero not found.");
 
@@ -58,11 +58,11 @@ namespace LibraryWebAPI.Controllers
             return Ok(result);
         }
 
-        // DELETE: api/Library/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Library>> DeleteLibrary(Guid id)
+        // DELETE: api/Library/guid
+        [HttpDelete("{libraryId}")]
+        public async Task<ActionResult<Library>> DeleteLibrary(Guid libraryId)
         {
-            var result = await _libraryService.DeleteLibrary(id);
+            var result = await _libraryService.DeleteLibrary(libraryId);
             if (result is null)
                 return NotFound("Hero not found.");
 

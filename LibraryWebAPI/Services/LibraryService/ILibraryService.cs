@@ -3,10 +3,10 @@
     public interface ILibraryService
     {
         Task<List<Library>> GetAllLibraries();
-        Task<Library?> GetLibraryById(Guid guid);
+        Task<Library?> GetLibraryById(Guid libraryId);
         Task<Library?> AddLibrary(Library library);
-        Task<Library?> UpdateLibrary(Guid guid, Library request);
-        Task<List<Library>> DeleteLibrary(Guid guid);
+        Task<Library?> UpdateLibrary(Guid libraryId, Library request);
+        Task<List<Library>> DeleteLibrary(Guid libraryId);
 
     }
 }

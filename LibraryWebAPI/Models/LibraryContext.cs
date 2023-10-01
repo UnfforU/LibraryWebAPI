@@ -34,7 +34,7 @@ public partial class LibraryContext : DbContext
             entity.ToTable("author");
 
             entity.Property(e => e.AuthorId)
-                .ValueGeneratedNever()
+                .HasDefaultValue(new Guid())
                 .HasColumnName("authorId");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
@@ -53,7 +53,7 @@ public partial class LibraryContext : DbContext
             entity.HasIndex(e => e.Owner, "IXFK_book_user");
 
             entity.Property(e => e.BookId)
-                .ValueGeneratedNever()
+                .HasDefaultValue(new Guid())
                 .HasColumnName("bookId");
             entity.Property(e => e.Author).HasColumnName("author");
             entity.Property(e => e.BookedDate).HasColumnName("bookedDate");
@@ -108,7 +108,7 @@ public partial class LibraryContext : DbContext
             entity.ToTable("user");
 
             entity.Property(e => e.UserId)
-                .ValueGeneratedNever()
+                .HasDefaultValue(new Guid())
                 .HasColumnName("userId");
             entity.Property(e => e.IsAdmin).HasColumnName("isAdmin");
             entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
