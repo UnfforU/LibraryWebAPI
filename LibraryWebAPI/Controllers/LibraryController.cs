@@ -60,7 +60,7 @@ namespace LibraryWebAPI.Controllers
 
         // DELETE: api/Library/guid
         [HttpDelete("{libraryId}")]
-        public async Task<ActionResult<Library>> DeleteLibrary(Guid libraryId)
+        public async Task<ActionResult<List<Library>>> DeleteLibrary(Guid libraryId)
         {
             var result = await _libraryService.DeleteLibrary(libraryId);
             if (result is null)

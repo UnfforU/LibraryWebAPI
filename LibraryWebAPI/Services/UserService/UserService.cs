@@ -37,12 +37,13 @@ namespace LibraryWebAPI.Services.UserService
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
-            return await _context.Users.ToListAsync();
+            return await _context.Users.Where(u => u.IsDeleted != true).ToListAsync();
         }
 
         public User? GetUserByLoginData(Login login) =>
-            _context.Users.SingleOrDefault(u => 
-                (u.UserName == login.UserName) 
+            _context.Users.SingleOrDefault(u =>
+                (u.IsDeleted == false)
+                && (u.UserName == login.UserName) 
                 && (u.Password == ComputeSHA256(login.Password)));
     
            

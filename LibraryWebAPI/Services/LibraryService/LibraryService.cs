@@ -28,12 +28,12 @@ namespace LibraryWebAPI.Services.LibraryService
             _context.Entry(library).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
-            return await _context.Libraries.ToListAsync();
+            return await _context.Libraries.Where(l => l.IsDeleted == null).ToListAsync();
         }
 
         public async Task<List<Library>> GetAllLibraries()
         {
-            var libraries = await _context.Libraries.ToListAsync();
+            var libraries = await _context.Libraries.Where(l => l.IsDeleted == null).ToListAsync();
             return libraries;
         }
 

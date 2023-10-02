@@ -1,4 +1,5 @@
 ﻿using LibraryWebAPI.Services.AuthorService;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Runtime.CompilerServices;
 
 namespace LibraryWebAPI.Services.BookService
@@ -31,15 +32,44 @@ namespace LibraryWebAPI.Services.BookService
                 LibraryId = book.LibraryId,
             };
 
+            book.BookId = newBook.BookId;
 
             _context.Books.Add(newBook);
             await _context.SaveChangesAsync();
             return book;
         }
 
-        public Task<List<BookDTO>> DeleteBook(Guid bookId)
+        public async Task<List<BookDTO>> DeleteBook(Guid bookId)
         {
-            throw new NotImplementedException();
+            var deletedBook = await _context.Books.FindAsync(bookId);
+            if (deletedBook is null)
+                return null;
+
+            var libraryId = deletedBook.LibraryId;
+
+            deletedBook.IsDeleted = true;
+            _context.Entry(deletedBook).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            var books = await _context.Books.Where(book => book.IsDeleted == null && book.LibraryId == libraryId).ToListAsync();
+
+            var result = new List<BookDTO>();
+            foreach (var book in books)
+            {
+                result.Add(new BookDTO()
+                {
+                    BookId = book.BookId,
+                    Name = book.Name,
+                    AuthorName = _context.Authors.Find(book.AuthorId).Name.ToString(),
+                    Description = book.Description,
+                    IsBooked = book.IsBooked,
+                    OwnerId = book.OwnerId,
+                    BookedDate = book.BookedDate,
+                    LibraryId = book.LibraryId,
+                });
+            }
+
+            return result;
         }
 
         public async Task<List<BookDTO>> GetAllBooksInLibrary(Guid libraryId)
@@ -69,9 +99,25 @@ namespace LibraryWebAPI.Services.BookService
             throw new NotImplementedException();
         }
 
-        public Task<BookDTO?> UpdateBook(Guid bookId, BookDTO request)
+        public async Task<BookDTO?> UpdateBook(Guid bookId, BookDTO request)
         {
-            throw new NotImplementedException();
+            var book = await _context.Books.FindAsync(bookId);
+            if (book is null)
+                return null;
+            
+            book.BookId = request.BookId;
+            book.Name = request.Name;
+            book.AuthorId = _context.Authors.First(au => au.Name == request.AuthorName).AuthorId;
+            book.Description = request.Description;
+            book.IsBooked = request.IsBooked;
+            book.OwnerId = request.OwnerId;
+            book.BookedDate = request.BookedDate;
+            book.LibraryId = request.LibraryId;
+
+            _context.Entry(book).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return  request;
         }
     }
 }

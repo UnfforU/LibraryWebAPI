@@ -47,42 +47,21 @@ namespace LibraryWebAPI.Controllers
         //    return book;
         //}
 
-        //// PUT: api/Book/5
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutBook(Guid id, Book book)
-        //{
-        //    if (id != book.BookId)
-        //    {
-        //        return BadRequest();
-        //    }
+        // PUT: api/Book/5
+        [HttpPut("{bookId}")]
+        public async Task<ActionResult<BookDTO>> UpdateBook(Guid bookId, BookDTO book)
+        {
+            await _bookService.UpdateBook(bookId, book);
 
-        //    _context.Entry(book).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!BookExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
         // POST: api/Book
         [HttpPost]
         public async Task<ActionResult<BookDTO>> AddBook(BookDTO book)
         {
             await _bookService.AddBook(book);
-            if(book != null)
+            if (book != null)
             {
                 return Ok(book);
             }
@@ -92,25 +71,16 @@ namespace LibraryWebAPI.Controllers
             }
         }
 
-        //// DELETE: api/Book/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteBook(Guid id)
-        //{
-        //    if (_context.Books == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var book = await _context.Books.FindAsync(id);
-        //    if (book == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // DELETE: api/Book/guid
+        [HttpDelete("{bookId}")]
+        public async Task<ActionResult<List<Book>>> DeleteBook(Guid bookId)
+        {
+            var result = await _bookService.DeleteBook(bookId);
+            if (result is null)
+                return NotFound("Hero not found.");
 
-        //    _context.Books.Remove(book);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
+            return Ok(result);
+        }
 
         //private bool BookExists(Guid id)
         //{
