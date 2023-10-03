@@ -6,14 +6,11 @@ namespace LibraryWebAPI.Models;
 public partial class User
 {
     public Guid UserId { get; set; }
-
     public string UserName { get; set; } = null!;
-
     public string Password { get; set; } = null!;
-
-    public bool? IsAdmin { get; set; }
-
+    public Guid RoleId { get; set; }
     public bool? IsDeleted { get; set; }
 
     public virtual ICollection<Book> Books { get; set; } = new List<Book>();
+    public virtual UserRole Role { get; set; } = null!;
 }

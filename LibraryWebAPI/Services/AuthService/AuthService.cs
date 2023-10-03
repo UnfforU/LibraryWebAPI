@@ -17,7 +17,7 @@ namespace LibraryWebAPI.Services.AuthService
             _userService = userService;
         }
 
-        public string AuthenticateUser(Login login)
+        public string AuthenticateUser(LoginDTO login)
         {
             var user = _userService.GetUserByLoginData(login);
             if (user == null)
@@ -37,7 +37,7 @@ namespace LibraryWebAPI.Services.AuthService
             {
                 new Claim(JwtRegisteredClaimNames.Name, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
-                new Claim("isAdmin", user.IsAdmin == true ? "yes": "no")
+                //new Claim("isAdmin", user.IsAdmin == true ? "yes": "no")
             };
 
             var token = new JwtSecurityToken(

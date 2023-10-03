@@ -6,11 +6,11 @@ namespace LibraryWebAPI.Services.BookService
 {
     public class BookService : IBookService
     {
-        private readonly LibraryContext _context;
+        private readonly WebLibraryDbContext _context;
         private readonly IAuthorService _authorService;
 
 
-        public BookService(LibraryContext context, IAuthorService authorService)
+        public BookService(WebLibraryDbContext context, IAuthorService authorService)
         {
             this._context = context;
             _authorService = authorService;
@@ -24,7 +24,7 @@ namespace LibraryWebAPI.Services.BookService
             {
                 BookId = Guid.NewGuid(),
                 Name = book.Name,
-                AuthorId = author.Result.AuthorId,
+                //AuthorId = author.Result.AuthorId,
                 Description = book.Description,
                 IsBooked = book.IsBooked,
                 OwnerId = book.OwnerId,
@@ -60,7 +60,7 @@ namespace LibraryWebAPI.Services.BookService
                 {
                     BookId = book.BookId,
                     Name = book.Name,
-                    AuthorName = _context.Authors.Find(book.AuthorId).Name.ToString(),
+                    //AuthorName = _context.Authors.Find(book.AuthorId).Name.ToString(),
                     Description = book.Description,
                     IsBooked = book.IsBooked,
                     OwnerId = book.OwnerId,
@@ -83,7 +83,7 @@ namespace LibraryWebAPI.Services.BookService
                 {
                     BookId = book.BookId,
                     Name = book.Name,
-                    AuthorName = _context.Authors.Find(book.AuthorId).Name.ToString(),
+                    //AuthorName = _context.Authors.Find(book.AuthorId).Name.ToString(),
                     Description = book.Description,
                     IsBooked = book.IsBooked,
                     OwnerId = book.OwnerId,
@@ -107,7 +107,7 @@ namespace LibraryWebAPI.Services.BookService
             
             book.BookId = request.BookId;
             book.Name = request.Name;
-            book.AuthorId = _context.Authors.First(au => au.Name == request.AuthorName).AuthorId;
+            //book.AuthorId = _context.Authors.First(au => au.Name == request.AuthorName).AuthorId;
             book.Description = request.Description;
             book.IsBooked = request.IsBooked;
             book.OwnerId = request.OwnerId;

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace LibraryWebAPI.Models;
 
-public partial class Library
+public partial class UserRole
 {
-    public Guid LibraryId { get; set; }
+    public Guid UserRoleId { get; set; }
     public string Name { get; set; } = null!;
     public bool? IsDeleted { get; set; }
 
-    public virtual ICollection<Book> Books { get; set; } = new List<Book>();
+    public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

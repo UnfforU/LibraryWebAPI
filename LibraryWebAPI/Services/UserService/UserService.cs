@@ -5,8 +5,8 @@ namespace LibraryWebAPI.Services.UserService
 {
     public class UserService : IUserService
     {
-        private readonly LibraryContext _context;
-        public UserService(LibraryContext context)
+        private readonly WebLibraryDbContext _context;
+        public UserService(WebLibraryDbContext context)
         {
             this._context = context;
         }
@@ -18,7 +18,7 @@ namespace LibraryWebAPI.Services.UserService
                 UserId = Guid.NewGuid(),
                 UserName = userDTO.UserName,
                 Password = ComputeSHA256(userDTO.Password),
-                IsAdmin = userDTO.IsAdmin,
+                //IsAdmin = userDTO.IsAdmin,
                 IsDeleted = false
             };
 
@@ -40,7 +40,7 @@ namespace LibraryWebAPI.Services.UserService
             return await _context.Users.Where(u => u.IsDeleted != true).ToListAsync();
         }
 
-        public User? GetUserByLoginData(Login login) =>
+        public User? GetUserByLoginData(LoginDTO login) =>
             _context.Users.SingleOrDefault(u =>
                 (u.IsDeleted == false)
                 && (u.UserName == login.UserName) 

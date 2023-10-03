@@ -2,8 +2,8 @@
 {
     public class AuthorService : IAuthorService
     {
-        private readonly LibraryContext _context;
-        public AuthorService(LibraryContext context)
+        private readonly WebLibraryDbContext _context;
+        public AuthorService(WebLibraryDbContext context)
         {
             this._context = context;
         }

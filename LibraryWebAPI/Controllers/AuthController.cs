@@ -18,9 +18,9 @@ namespace LibraryWebAPI.Controllers
 
         [Route("login")]
         [HttpPost]
-        public ActionResult Login(Login request)
+        public ActionResult Login(LoginDTO login)
         {
-            var token =  _authService.AuthenticateUser(request);
+            var token =  _authService.AuthenticateUser(login);
             if(token == string.Empty)
                 return Unauthorized();
 

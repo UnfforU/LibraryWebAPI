@@ -5,8 +5,8 @@ namespace LibraryWebAPI.Services.LibraryService
     public class LibraryService : ILibraryService
     {
 
-        private readonly LibraryContext _context;
-        public LibraryService(LibraryContext context)
+        private readonly WebLibraryDbContext _context;
+        public LibraryService(WebLibraryDbContext context)
         {
             this._context = context;
         }

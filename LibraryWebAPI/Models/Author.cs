@@ -6,8 +6,8 @@ namespace LibraryWebAPI.Models;
 public partial class Author
 {
     public Guid AuthorId { get; set; }
-
     public string Name { get; set; } = null!;
+    public bool? IsDeleted { get; set; }
 
-    public virtual ICollection<Book> Books { get; set; } = new List<Book>();
+    public virtual ICollection<AuthorBook> AuthorBooks { get; set; } = new List<AuthorBook>();
 }

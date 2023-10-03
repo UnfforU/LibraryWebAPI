@@ -2,7 +2,7 @@
 {
     public interface IAuthService
     {
-        string AuthenticateUser(Login login);
+        string AuthenticateUser(LoginDTO login);
 
     }
 }
