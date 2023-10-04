@@ -11,8 +11,8 @@ namespace LibraryWebAPI.Helpers
     public class CryptographyHelper : ICryptographyHelper
     {
         private const int MAXIMUM_SALT_LENGTH = 8;
-
         private readonly IOptions<AuthOptions> _authOptions;
+
         public CryptographyHelper(IOptions<AuthOptions> authOptions)
         {
             _authOptions = authOptions;
@@ -35,7 +35,6 @@ namespace LibraryWebAPI.Helpers
         public string GenerateSalt()
         {
             var salt = new byte[MAXIMUM_SALT_LENGTH];
-
             using (var random = new RNGCryptoServiceProvider())
             {
                 random.GetNonZeroBytes(salt);
@@ -54,7 +53,7 @@ namespace LibraryWebAPI.Helpers
             {
                 new Claim(JwtRegisteredClaimNames.Name, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
-                //new Claim("isAdmin", user.IsAdmin == true ? "yes": "no")
+                new Claim("role", ((byte)user.Role.RoleIndex).ToString())
             };
 
             var token = new JwtSecurityToken(

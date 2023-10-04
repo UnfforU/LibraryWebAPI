@@ -1,6 +1,6 @@
 ﻿namespace LibraryWebAPI.Models.Extra
 {
-    public enum EnumUserRoles
+    public enum EnumUserRoles : byte
     {
         DefaultUser = 0,
         Admin = 1,

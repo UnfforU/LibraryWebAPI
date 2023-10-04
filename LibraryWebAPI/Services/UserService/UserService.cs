@@ -31,7 +31,7 @@ namespace LibraryWebAPI.Services.UserService
                 UserName = userDTO.UserName,
                 Salt = _salt,
                 Password = _cryptoHelper.ComputeSHA256(userDTO.Password, _salt),
-                Role = new UserRole() { UserRoleId = Guid.NewGuid(), Name = "DefaultUser", RoleIndex = EnumUserRoles.DefaultUser },
+                Role = new UserRole() { UserRoleId = Guid.NewGuid(), Name = EnumUserRoles.DefaultUser.ToString(), RoleIndex = EnumUserRoles.DefaultUser },
             };
 
             _context.Users.Add(newUser);
@@ -54,9 +54,14 @@ namespace LibraryWebAPI.Services.UserService
 
         public User? GetUserByLoginData(LoginDTO login)
         {
-            var potencialUser = _context.Users.SingleOrDefault(u => u.UserName == login.UserName && !u.IsDeleted);
 
-            if(potencialUser == null)
+           
+            var potencialUser = _context.Users
+                    .Include(u => u.Role)
+                    .SingleOrDefault(u => u.UserName == login.UserName && !u.IsDeleted);
+ 
+
+            if (potencialUser == null)
             {
                 return null;
             }
