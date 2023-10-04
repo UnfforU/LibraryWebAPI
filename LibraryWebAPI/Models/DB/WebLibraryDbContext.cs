@@ -24,7 +24,6 @@ public partial class WebLibraryDbContext : DbContext
         {
             entity.ToTable("Author");
 
-            entity.Property(e => e.AuthorId).ValueGeneratedNever();
             entity.Property(e => e.Name).HasMaxLength(600);
         });
 

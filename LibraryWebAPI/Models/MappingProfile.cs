@@ -6,7 +6,7 @@ namespace LibraryWebAPI.Models
     {
         public MappingProfile()
         {
-            CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<Author, AuthorDTO>().ReverseMap();
         }
     }
 }
