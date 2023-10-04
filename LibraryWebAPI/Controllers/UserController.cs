@@ -13,7 +13,7 @@ using LibraryWebAPI.Models.DB;
 
 namespace LibraryWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/Users")]
     [ApiController]
     public class UserController : ControllerBase
     {

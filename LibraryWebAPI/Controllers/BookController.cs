@@ -11,7 +11,7 @@ using LibraryWebAPI.Models.DB;
 
 namespace LibraryWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/Books")]
     [ApiController]
     public class BookController : ControllerBase
     {
@@ -47,15 +47,6 @@ namespace LibraryWebAPI.Controllers
         //    return book;
         //}
 
-        // PUT: api/Book/5
-        [HttpPut("{bookId}")]
-        public async Task<ActionResult<BookDTO>> UpdateBook(Guid bookId, BookDTO book)
-        {
-            await _bookService.UpdateBook(bookId, book);
-
-            return NoContent();
-        }
-
         // POST: api/Book
         [HttpPost]
         public async Task<ActionResult<BookDTO>> AddBook(BookDTO book)
@@ -69,6 +60,15 @@ namespace LibraryWebAPI.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        // PUT: api/Book/5
+        [HttpPut("{bookId}")]
+        public async Task<ActionResult<BookDTO>> UpdateBook(Guid bookId, BookDTO book)
+        {
+            await _bookService.UpdateBook(bookId, book);
+
+            return NoContent();
         }
 
         // DELETE: api/Book/guid

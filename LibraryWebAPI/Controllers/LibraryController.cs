@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/Libraries")]
     [ApiController]
     public class LibraryController : ControllerBase
     {
@@ -22,14 +22,12 @@ namespace LibraryWebAPI.Controllers
             _libraryService = libaryService;
         }
 
-        // GET: api/Library
         [HttpGet]
         public async Task<ActionResult<List<Library>>> GetLibraries()
         {
             return await _libraryService.GetAllLibraries();
         }
 
-        // GET: api/Library/guid
         [HttpGet("{libraryId}")]
         public async Task<ActionResult<Library>> GetLibraryById(Guid libraryId)
         {
@@ -40,7 +38,13 @@ namespace LibraryWebAPI.Controllers
             return Ok(result);
         }
 
-        // PUT: api/Library/guid
+        [HttpPost]
+        public async Task<ActionResult<Library>> AddLibrary(Library library)
+        {
+            var result = await _libraryService.AddLibrary(library);
+            return Ok(result);
+        }
+
         [HttpPut("{libraryId}")]
         public async Task<ActionResult<Library>> UpdateLibrary(Guid libraryId, Library request)
         {
@@ -51,15 +55,6 @@ namespace LibraryWebAPI.Controllers
             return Ok(result);
         }
 
-        // POST: api/Library
-        [HttpPost]
-        public async Task<ActionResult<Library>> AddLibrary(Library library)
-        {
-            var result = await _libraryService.AddLibrary(library);
-            return Ok(result);
-        }
-
-        // DELETE: api/Library/guid
         [HttpDelete("{libraryId}")]
         public async Task<ActionResult<List<Library>>> DeleteLibrary(Guid libraryId)
         {

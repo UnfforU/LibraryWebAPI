@@ -5,7 +5,7 @@ using Microsoft.Identity.Client;
 
 namespace LibraryWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/Auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -16,7 +16,6 @@ namespace LibraryWebAPI.Controllers
             _authService = authService;
         }
 
-        [Route("login")]
         [HttpPost]
         public ActionResult Login(LoginDTO login)
         {
