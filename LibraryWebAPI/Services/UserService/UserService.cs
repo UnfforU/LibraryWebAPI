@@ -1,5 +1,7 @@
-﻿using LibraryWebAPI.Models.DB;
+﻿
+using LibraryWebAPI.Models.DB;
 using LibraryWebAPI.Models.Extra;
+using LibraryWebAPI.Services.AuthService;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -8,10 +10,12 @@ namespace LibraryWebAPI.Services.UserService
     public class UserService : IUserService
     {
         private readonly WebLibraryDbContext _context;
-      
-        public UserService(WebLibraryDbContext context)
+        private readonly ICryptographyHelper _cryptoHelper;
+
+        public UserService(WebLibraryDbContext context, ICryptographyHelper cryptoHelper)
         {
             this._context = context;
+            this._cryptoHelper = cryptoHelper;
         }
 
         public async Task<List<User>> AddUser(UserDTO userDTO)
@@ -20,13 +24,13 @@ namespace LibraryWebAPI.Services.UserService
             //!Нужна проверка на то, есть ли пользователь уже с таким же именем
 
 
-            var _salt = GenerateSalt();
+            var _salt = _cryptoHelper.GenerateSalt();
             var newUser = new User
             {
                 UserId = Guid.NewGuid(),
                 UserName = userDTO.UserName,
                 Salt = _salt,
-                Password = ComputeSHA256WithSalt(userDTO.Password, _salt),
+                Password = _cryptoHelper.ComputeSHA256(userDTO.Password, _salt),
                 Role = new UserRole() { UserRoleId = Guid.NewGuid(), Name = "DefaultUser", RoleIndex = EnumUserRoles.DefaultUser },
             };
 
@@ -56,7 +60,7 @@ namespace LibraryWebAPI.Services.UserService
             {
                 return null;
             }
-            else if (potencialUser.Password == ComputeSHA256WithSalt(login.Password, potencialUser.Salt)) 
+            else if (potencialUser.Password == _cryptoHelper.ComputeSHA256(login.Password, potencialUser.Salt)) 
             {
                 return potencialUser;
             }
@@ -64,37 +68,6 @@ namespace LibraryWebAPI.Services.UserService
             {
                 return null;
             }
-        }
-            
-    
-           
-
-        private string ComputeSHA256WithSalt(string input, string salt)
-        {
-            string hash = String.Empty;
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] hashValue = sha256.ComputeHash(Encoding.UTF8.GetBytes(String.Concat(input, salt)));
-                foreach (byte b in hashValue) 
-                {
-                    hash += $"{b:X2}";
-                }
-            }
-            return hash;
-        }
-
-        private string GenerateSalt()
-        {
-            var maximumSaltLength = 8;
-            var salt = new byte[maximumSaltLength];
-
-            using (var random = new RNGCryptoServiceProvider())
-            {
-                random.GetNonZeroBytes(salt);
-
-            }
-            return Convert.ToBase64String(salt);
-
         }
     }
 }
