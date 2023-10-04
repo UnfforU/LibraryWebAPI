@@ -1,4 +1,5 @@
-﻿using LibraryWebAPI.Services.UserService;
+﻿using LibraryWebAPI.Models.DB;
+using LibraryWebAPI.Services.UserService;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NuGet.Common;

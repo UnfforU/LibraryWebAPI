@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using LibraryWebAPI.Models;
 using LibraryWebAPI.Services.BookService;
 using LibraryWebAPI.Services.LibraryService;
+using LibraryWebAPI.Models.DB;
 
 namespace LibraryWebAPI.Controllers
 {

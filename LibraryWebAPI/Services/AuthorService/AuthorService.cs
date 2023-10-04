@@ -1,4 +1,6 @@
-﻿namespace LibraryWebAPI.Services.AuthorService
+﻿using LibraryWebAPI.Models.DB;
+
+namespace LibraryWebAPI.Services.AuthorService
 {
     public class AuthorService : IAuthorService
     {

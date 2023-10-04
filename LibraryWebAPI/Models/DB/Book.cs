@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LibraryWebAPI.Models;
+namespace LibraryWebAPI.Models.DB;
 
 public partial class Book
 {
@@ -10,7 +10,7 @@ public partial class Book
     public string? Description { get; set; }
     public byte[]? Cover { get; set; }
     public Guid LibraryId { get; set; }
-    public bool? IsDeleted { get; set; }
+    public bool IsDeleted { get; set; }
     public Guid? OwnerId { get; set; }
     public DateTime? BookedDate { get; set; }
     public bool? IsBooked { get; set; }

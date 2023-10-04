@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using LibraryWebAPI.Models.DB;
 using LibraryWebAPI.Services.LibraryService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

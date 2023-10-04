@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic;
+﻿using LibraryWebAPI.Models.DB;
+using Microsoft.VisualBasic;
 
 namespace LibraryWebAPI.Services.LibraryService
 {

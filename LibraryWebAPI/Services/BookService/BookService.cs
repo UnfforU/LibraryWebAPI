@@ -1,4 +1,5 @@
-﻿using LibraryWebAPI.Services.AuthorService;
+﻿using LibraryWebAPI.Models.DB;
+using LibraryWebAPI.Services.AuthorService;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Runtime.CompilerServices;
 

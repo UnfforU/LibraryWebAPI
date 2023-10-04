@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace LibraryWebAPI.Models;
+namespace LibraryWebAPI.Models.DB;
 
 public partial class WebLibraryDbContext : DbContext
 {
@@ -81,6 +81,7 @@ public partial class WebLibraryDbContext : DbContext
                 .HasMaxLength(64)
                 .IsUnicode(false)
                 .IsFixedLength();
+            entity.Property(e => e.Salt).HasMaxLength(50);
             entity.Property(e => e.UserName).HasMaxLength(40);
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
