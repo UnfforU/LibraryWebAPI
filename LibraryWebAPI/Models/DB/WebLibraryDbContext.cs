@@ -22,6 +22,7 @@ public partial class WebLibraryDbContext : DbContext
         modelBuilder.Entity<Author>(entity =>
         {
             entity.ToTable("Author");
+            entity.HasQueryFilter(author => EF.Property<bool>(author, "IsDeleted") == false);
 
             entity.Property(e => e.Name).HasMaxLength(600);
         });
@@ -29,6 +30,7 @@ public partial class WebLibraryDbContext : DbContext
         modelBuilder.Entity<AuthorBook>(entity =>
         {
             entity.ToTable("Author_Book");
+            entity.HasQueryFilter(ab => EF.Property<bool>(ab, "IsDeleted") == false);
 
             entity.HasOne(d => d.Author).WithMany(p => p.AuthorBooks)
                 .HasForeignKey(d => d.AuthorId)
@@ -44,8 +46,8 @@ public partial class WebLibraryDbContext : DbContext
         modelBuilder.Entity<Book>(entity =>
         {
             entity.ToTable("Book");
+            entity.HasQueryFilter(book => EF.Property<bool>(book, "IsDeleted") == false);
 
-            entity.Property(e => e.BookId).ValueGeneratedNever();
             entity.Property(e => e.Cover).HasColumnType("image");
             entity.Property(e => e.Description).HasMaxLength(2000);
             entity.Property(e => e.Name).HasMaxLength(50);
@@ -63,6 +65,7 @@ public partial class WebLibraryDbContext : DbContext
         modelBuilder.Entity<Library>(entity =>
         {
             entity.ToTable("Library");
+            entity.HasQueryFilter(library => EF.Property<bool>(library, "IsDeleted") == false);
 
             entity.Property(e => e.Name).HasMaxLength(1000);
         });
@@ -70,6 +73,7 @@ public partial class WebLibraryDbContext : DbContext
         modelBuilder.Entity<User>(entity =>
         {
             entity.ToTable("User");
+            entity.HasQueryFilter(user => EF.Property<bool>(user, "IsDeleted") == false);
 
             entity.Property(e => e.Password)
                 .HasMaxLength(64)
@@ -87,6 +91,7 @@ public partial class WebLibraryDbContext : DbContext
         modelBuilder.Entity<UserRole>(entity =>
         {
             entity.ToTable("UserRole");
+            entity.HasQueryFilter(ur => EF.Property<bool>(ur, "IsDeleted") == false);
 
             entity.Property(e => e.UserRoleId).ValueGeneratedOnAdd();
             entity.Property(e => e.Name).HasMaxLength(100);

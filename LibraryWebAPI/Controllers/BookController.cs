@@ -16,42 +16,22 @@ namespace LibraryWebAPI.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookService _bookService;
-
         public BookController(IBookService bookService)
         {
             _bookService = bookService;
         }
 
-        //GET: api/Book/guid
         [HttpGet("{libraryId}")]
-        public async Task<ActionResult<List<BookDTO>>> GetBooksInLibrary(Guid libraryId)
+        public async Task<ActionResult<List<BookDTO>>> GetBooksByLibraryId(Guid libraryId)
         {
-            return await _bookService.GetAllBooksInLibrary(libraryId);
+            var result = await _bookService.GetBooksByLibraryIdAsync(libraryId);
+            return Ok(result);
         }
 
-        //// GET: api/Book/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Book>> GetBook(Guid id)
-        //{
-        //  if (_context.Books == null)
-        //  {
-        //      return NotFound();
-        //  }
-        //    var book = await _context.Books.FindAsync(id);
-
-        //    if (book == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return book;
-        //}
-
-        // POST: api/Book
         [HttpPost]
         public async Task<ActionResult<BookDTO>> AddBook(BookDTO book)
         {
-            await _bookService.AddBook(book);
+            await _bookService.AddBookAsync(book);
             if (book != null)
             {
                 return Ok(book);
@@ -62,29 +42,22 @@ namespace LibraryWebAPI.Controllers
             }
         }
 
-        // PUT: api/Book/5
-        [HttpPut("{bookId}")]
-        public async Task<ActionResult<BookDTO>> UpdateBook(Guid bookId, BookDTO book)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<BookDTO>> UpdateBook(Guid id, BookDTO book)
         {
-            await _bookService.UpdateBook(bookId, book);
-
-            return NoContent();
+            try
+            {
+                var result = await _bookService.UpdateBookAsync(id, book);
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return NotFound("Library not found.");
+            }
         }
 
-        // DELETE: api/Book/guid
-        [HttpDelete("{bookId}")]
-        public async Task<ActionResult<List<Book>>> DeleteBook(Guid bookId)
-        {
-            var result = await _bookService.DeleteBook(bookId);
-            if (result is null)
-                return NotFound("Hero not found.");
-
-            return Ok(result);
-        }
-
-        //private bool BookExists(Guid id)
-        //{
-        //    return (_context.Books?.Any(e => e.BookId == id)).GetValueOrDefault();
-        //}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<List<Book>>> DeleteBook(Guid id) =>
+            await _bookService.DeleteBookAsync(id) ? NoContent() : NotFound("Library not found.");
     }
 }

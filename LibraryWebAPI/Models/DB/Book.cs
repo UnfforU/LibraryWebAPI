@@ -13,9 +13,9 @@ public partial class Book
     public bool IsDeleted { get; set; }
     public Guid? OwnerId { get; set; }
     public DateTime? BookedDate { get; set; }
-    public bool? IsBooked { get; set; }
+    public bool IsBooked { get; set; }
 
-    public virtual ICollection<AuthorBook> AuthorBooks { get; set; } = new List<AuthorBook>();
+    public virtual List<AuthorBook> AuthorBooks { get; set; } = new List<AuthorBook>();
     public virtual Library Library { get; set; } = null!;
     public virtual User? Owner { get; set; }
 }

@@ -1,6 +1,9 @@
-﻿using LibraryWebAPI.Models.DB;
+﻿using AutoMapper;
+using LibraryWebAPI.Models.DB;
+using LibraryWebAPI.Services.AuthorBookService;
 using LibraryWebAPI.Services.AuthorService;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using NuGet.LibraryModel;
 using System.Runtime.CompilerServices;
 
 namespace LibraryWebAPI.Services.BookService
@@ -8,117 +11,83 @@ namespace LibraryWebAPI.Services.BookService
     public class BookService : IBookService
     {
         private readonly WebLibraryDbContext _context;
-        private readonly IAuthorService _authorService;
+       // private readonly IAuthorService _authorService;
+        private readonly IAuthorBookService _authorBookService;
+        private readonly IMapper _mapper;
 
 
-        public BookService(WebLibraryDbContext context, IAuthorService authorService)
+        public BookService(WebLibraryDbContext context, IAuthorService authorService, IMapper mapper, IAuthorBookService authorBookService)
         {
             this._context = context;
-            _authorService = authorService;
+            //this._authorService = authorService;
+            this._mapper = mapper;
+            this._authorBookService = authorBookService;
         }
 
-        public async Task<BookDTO?> AddBook(BookDTO book)
+        public async Task<BookDTO> AddBookAsync(BookDTO book)
         {
-            var author = _authorService.AddAuthor(new Author { AuthorId = Guid.NewGuid(), Name = book.AuthorName });
-
-            var newBook = new Book()
-            {
-                BookId = Guid.NewGuid(),
-                Name = book.Name,
-                //AuthorId = author.Result.AuthorId,
-                Description = book.Description,
-                IsBooked = book.IsBooked,
-                OwnerId = book.OwnerId,
-                BookedDate = book.BookedDate,
-                LibraryId = book.LibraryId,
-            };
-
-            book.BookId = newBook.BookId;
+            var newBook = _mapper.Map<Book>(book); 
 
             _context.Books.Add(newBook);
-            await _context.SaveChangesAsync();
-            return book;
-        }
-
-        public async Task<List<BookDTO>> DeleteBook(Guid bookId)
-        {
-            var deletedBook = await _context.Books.FindAsync(bookId);
-            if (deletedBook is null)
-                return null;
-
-            var libraryId = deletedBook.LibraryId;
-
-            deletedBook.IsDeleted = true;
-            _context.Entry(deletedBook).State = EntityState.Modified;
+            foreach(var author in book.Authors)
+            {
+                _context.AuthorBooks.Add(new AuthorBook() { AuthorId = author.AuthorId, BookId = newBook.BookId });
+            }
             await _context.SaveChangesAsync();
 
-            var books = await _context.Books.Where(book => book.IsDeleted == null && book.LibraryId == libraryId).ToListAsync();
-
-            var result = new List<BookDTO>();
-            foreach (var book in books)
-            {
-                result.Add(new BookDTO()
-                {
-                    BookId = book.BookId,
-                    Name = book.Name,
-                    //AuthorName = _context.Authors.Find(book.AuthorId).Name.ToString(),
-                    Description = book.Description,
-                    IsBooked = book.IsBooked,
-                    OwnerId = book.OwnerId,
-                    BookedDate = book.BookedDate,
-                    LibraryId = book.LibraryId,
-                });
-            }
-
-            return result;
+            var newBookDTO = _mapper.Map<BookDTO>(newBook);
+            newBookDTO.Authors = book.Authors;
+            return newBookDTO;
         }
 
-        public async Task<List<BookDTO>> GetAllBooksInLibrary(Guid libraryId)
-        {
-            var books = await _context.Books.Where(book => book.IsDeleted == null && book.LibraryId == libraryId).ToListAsync();
+        public async Task<BookDTO?> GetBookByIdAsync(Guid id) =>
+            _mapper.Map<BookDTO>(await _context.Books.FindAsync(id));
 
-            var result = new List<BookDTO>();
-            foreach (var book in books)
-            {
-                result.Add(new BookDTO()
-                {
-                    BookId = book.BookId,
-                    Name = book.Name,
-                    //AuthorName = _context.Authors.Find(book.AuthorId).Name.ToString(),
-                    Description = book.Description,
-                    IsBooked = book.IsBooked,
-                    OwnerId = book.OwnerId,
-                    BookedDate = book.BookedDate,
-                    LibraryId = book.LibraryId,
-                });
-            }
-            return result;
+        public async Task<List<BookDTO>> GetBooksByLibraryIdAsync(Guid libraryId) =>
+            _mapper.Map<List<BookDTO>>(await _context.Books.Where(b => b.LibraryId == libraryId).ToListAsync());
+
+        public async Task<BookDTO> UpdateBookAsync(Guid id, BookDTO book)
+        {
+            var updBook = await _context.Books.FindAsync(id);
+            if (updBook is null)
+                throw new Exception("Library not found");
+
+            updBook = _mapper.Map<Book>(book);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<BookDTO>(updBook);
         }
 
-        public Task<BookDTO?> GetBookById(Guid bookId)
+        public async Task<bool> DeleteBookAsync(Guid id)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<BookDTO?> UpdateBook(Guid bookId, BookDTO request)
-        {
-            var book = await _context.Books.FindAsync(bookId);
+            var book = await _context.Books.FindAsync(id);
             if (book is null)
-                return null;
-            
-            book.BookId = request.BookId;
-            book.Name = request.Name;
-            //book.AuthorId = _context.Authors.First(au => au.Name == request.AuthorName).AuthorId;
-            book.Description = request.Description;
-            book.IsBooked = request.IsBooked;
-            book.OwnerId = request.OwnerId;
-            book.BookedDate = request.BookedDate;
-            book.LibraryId = request.LibraryId;
+                return false;
 
-            _context.Entry(book).State = EntityState.Modified;
+            book.IsDeleted = true;
             await _context.SaveChangesAsync();
-
-            return  request;
+            return true;
         }
+
+        //public async Task<BookDTO?> UpdateBook(Guid bookId, BookDTO request)
+        //{
+        //    var book = await _context.Books.FindAsync(bookId);
+        //    if (book is null)
+        //        return null;
+
+        //    book.BookId = request.BookId;
+        //    book.Name = request.Name;
+        //    //book.AuthorId = _context.Authors.First(au => au.Name == request.AuthorName).AuthorId;
+        //    book.Description = request.Description;
+        //    book.IsBooked = request.IsBooked;
+        //    book.OwnerId = request.OwnerId;
+        //    book.BookedDate = request.BookedDate;
+        //    book.LibraryId = request.LibraryId;
+
+        //    _context.Entry(book).State = EntityState.Modified;
+        //    await _context.SaveChangesAsync();
+
+        //    return  request;
+        //}
     }
 }
