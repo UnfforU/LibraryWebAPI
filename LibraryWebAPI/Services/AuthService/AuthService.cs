@@ -26,7 +26,7 @@ namespace LibraryWebAPI.Services.AuthService
             if (user == null)
                 return String.Empty;
 
-            return _cryptoHelper.GenerateJWT(new User());
+            return _cryptoHelper.GenerateJWT(user);
         }
     }
 }

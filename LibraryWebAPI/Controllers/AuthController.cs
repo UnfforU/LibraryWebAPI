@@ -9,7 +9,6 @@ namespace LibraryWebAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-
         private IAuthService _authService;
         public AuthController(IAuthService authService)
         {
@@ -19,7 +18,7 @@ namespace LibraryWebAPI.Controllers
         [HttpPost]
         public ActionResult Login(LoginDTO login)
         {
-            var token =  _authService.AuthenticateUser(login);
+            var token = _authService.AuthenticateUser(login);
             if(token == string.Empty)
                 return Unauthorized();
 

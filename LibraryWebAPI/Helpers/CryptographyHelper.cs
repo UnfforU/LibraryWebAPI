@@ -57,6 +57,8 @@ namespace LibraryWebAPI.Helpers
             };
 
             var token = new JwtSecurityToken(
+                issuer: authParams.Issuer,
+                audience: authParams.Audience,
                 claims: claims,
                 expires: DateTime.Now.AddSeconds(authParams.TokenLifetime),
                 signingCredentials: credentials);
