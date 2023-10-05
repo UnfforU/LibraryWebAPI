@@ -9,9 +9,9 @@ public partial class User
     public string UserName { get; set; } = null!;
     public string Password { get; set; } = null!;
     public string Salt { get; set; } = null!;
-    public Guid RoleId { get; set; }
+    public byte UserRoleId { get; set; }
     public bool IsDeleted { get; set; }
 
     public virtual ICollection<Book> Books { get; set; } = new List<Book>();
-    public virtual UserRole Role { get; set; } = null!;
+    public virtual UserRole UserRole { get; set; } = null!;
 }

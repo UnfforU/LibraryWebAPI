@@ -22,11 +22,11 @@ namespace LibraryWebAPI.Services.AuthService
 
         public string AuthenticateUser(LoginDTO login)
         {
-            var user = _userService.GetUserByLoginData(login);
+            var user = _userService.GetUserByLoginDTO(login);
             if (user == null)
                 return String.Empty;
 
-            return _cryptoHelper.GenerateJWT(user);
+            return _cryptoHelper.GenerateJWT(new User());
         }
     }
 }

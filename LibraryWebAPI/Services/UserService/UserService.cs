@@ -1,7 +1,10 @@
 ﻿
+using AutoMapper;
 using LibraryWebAPI.Models.DB;
+using LibraryWebAPI.Models.DTO;
 using LibraryWebAPI.Models.Extra;
 using LibraryWebAPI.Services.AuthService;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -11,59 +14,51 @@ namespace LibraryWebAPI.Services.UserService
     {
         private readonly WebLibraryDbContext _context;
         private readonly ICryptographyHelper _cryptoHelper;
-
-        public UserService(WebLibraryDbContext context, ICryptographyHelper cryptoHelper)
+        private readonly IMapper _mapper;
+        public UserService(WebLibraryDbContext context, ICryptographyHelper cryptoHelper, IMapper mapper)
         {
             this._context = context;
             this._cryptoHelper = cryptoHelper;
+            this._mapper = mapper;
         }
 
-        public async Task<List<User>> AddUser(UserDTO userDTO)
+        public async Task<UserDTO> AddUserAsync(UserDTO user)
         {
-
-            //!Нужна проверка на то, есть ли пользователь уже с таким же именем
-
-
-            var _salt = _cryptoHelper.GenerateSalt();
-            var newUser = new User
+            if (IsUserExist(user.UserName))
             {
-                UserId = Guid.NewGuid(),
-                UserName = userDTO.UserName,
-                Salt = _salt,
-                Password = _cryptoHelper.ComputeSHA256(userDTO.Password, _salt),
-                Role = new UserRole() { UserRoleId = Guid.NewGuid(), Name = EnumUserRoles.DefaultUser.ToString(), RoleIndex = EnumUserRoles.DefaultUser },
-            };
+                throw new Exception("User already exists!");
+            }
+
+            var newUser = _mapper.Map<User>(user);
+
+            newUser.Salt = _cryptoHelper.GenerateSalt();
+            newUser.Password = _cryptoHelper.ComputeSHA256(newUser.Password, newUser.Salt);
 
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
-            return await _context.Users.ToListAsync();
+            return _mapper.Map<UserDTO>(newUser);
         }
 
-        public async Task<List<User>> DeleteUser(Guid userId)
+        public async Task<bool> DeleteUserAsync(Guid id)
         {
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _context.Users.FindAsync(id);
             if (user is null)
-                return null;
+                return false;
 
             user.IsDeleted = true;
-            _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-
-            return await _context.Users.Where(u => u.IsDeleted != true).ToListAsync();
+            return true;
         }
 
-        public User? GetUserByLoginData(LoginDTO login)
+        public User? GetUserByLoginDTO(LoginDTO login)
         {
-
-           
             var potencialUser = _context.Users
-                    .Include(u => u.Role)
+                    .Include(u => u.UserRole)
                     .SingleOrDefault(u => u.UserName == login.UserName && !u.IsDeleted);
  
-
             if (potencialUser == null)
             {
-                return null;
+                return potencialUser;
             }
             else if (potencialUser.Password == _cryptoHelper.ComputeSHA256(login.Password, potencialUser.Salt)) 
             {
@@ -74,5 +69,11 @@ namespace LibraryWebAPI.Services.UserService
                 return null;
             }
         }
+
+        private bool IsUserExist(string userName)
+        {
+            return (_context.Users?.Any(e => e.UserName == userName)).GetValueOrDefault();
+        }
+
     }
 }

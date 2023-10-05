@@ -10,6 +10,7 @@ using LibraryWebAPI.Services.LibraryService;
 using LibraryWebAPI.Services.UserService;
 using NuGet.LibraryModel;
 using LibraryWebAPI.Models.DB;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace LibraryWebAPI.Controllers
 {
@@ -23,22 +24,17 @@ namespace LibraryWebAPI.Controllers
             _userService = userService;
         }
 
-        //POST api/User
         [HttpPost]
-        public async Task<List<User>> AddUser(UserDTO userDTO)
+        public async Task<ActionResult<UserDTO>> AddUser(UserDTO userDTO)
         {
-            return await _userService.AddUser(userDTO);
+            return await _userService.AddUserAsync(userDTO);
         }
 
-        //DELETE: api/User/5
-        [HttpDelete("{userId}")]
-        public async Task<ActionResult<List<User>>> DeleteUser(Guid userId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(Guid id)
         {
-            var result = await _userService.DeleteUser(userId);
-            if (result is null)
-                return NotFound("Hero not found.");
-
-            return Ok(result);
+            var isDeleted = await _userService.DeleteUserAsync(id);
+            return isDeleted ? NoContent() : NotFound();
         }
     }
 }

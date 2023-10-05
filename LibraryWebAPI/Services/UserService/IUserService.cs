@@ -5,14 +5,8 @@ namespace LibraryWebAPI.Services.UserService
 {
     public interface IUserService
     {
-        Task<List<User>> AddUser(UserDTO user);
-        Task<List<User>> DeleteUser(Guid userId);
-
-        User? GetUserByLoginData(LoginDTO login);
-
-        //Task<User?> GetBookById(Guid bookId);
-        
-        //Task<Book?> UpdateBook(Guid bookId, Book request);
-        //Task<List<Book>> DeleteBook(Guid bookId);
+        Task<UserDTO> AddUserAsync(UserDTO user);
+        Task<bool> DeleteUserAsync(Guid id);
+        User? GetUserByLoginDTO(LoginDTO login);
     }
 }
