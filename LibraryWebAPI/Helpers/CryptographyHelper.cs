@@ -53,7 +53,7 @@ namespace LibraryWebAPI.Helpers
             {
                 new Claim(JwtRegisteredClaimNames.Name, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
-                new Claim("role", ((byte)user.Role.RoleIndex).ToString())
+                new Claim("role", user.UserRoleId.ToString())
             };
 
             var token = new JwtSecurityToken(

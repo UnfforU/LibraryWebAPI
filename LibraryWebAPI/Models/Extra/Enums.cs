@@ -2,7 +2,7 @@
 {
     public enum EnumUserRoles : byte
     {
-        DefaultUser = 0,
-        Admin = 1,
+        DefaultUser = 1,
+        Admin
     }
 }

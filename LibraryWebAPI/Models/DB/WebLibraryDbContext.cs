@@ -10,7 +10,6 @@ public partial class WebLibraryDbContext : DbContext
         : base(options)
     {
     }
-
     public virtual DbSet<Author> Authors { get; set; }
     public virtual DbSet<AuthorBook> AuthorBooks { get; set; }
     public virtual DbSet<Book> Books { get; set; }
@@ -75,7 +74,6 @@ public partial class WebLibraryDbContext : DbContext
         {
             entity.ToTable("User");
 
-            entity.Property(e => e.UserId).ValueGeneratedNever();
             entity.Property(e => e.Password)
                 .HasMaxLength(64)
                 .IsUnicode(false)
@@ -83,8 +81,8 @@ public partial class WebLibraryDbContext : DbContext
             entity.Property(e => e.Salt).HasMaxLength(50);
             entity.Property(e => e.UserName).HasMaxLength(40);
 
-            entity.HasOne(d => d.Role).WithMany(p => p.Users)
-                .HasForeignKey(d => d.RoleId)
+            entity.HasOne(d => d.UserRole).WithMany(p => p.Users)
+                .HasForeignKey(d => d.UserRoleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_User_UserRole");
         });
@@ -93,7 +91,7 @@ public partial class WebLibraryDbContext : DbContext
         {
             entity.ToTable("UserRole");
 
-            entity.Property(e => e.UserRoleId).ValueGeneratedNever();
+            entity.Property(e => e.UserRoleId).ValueGeneratedOnAdd();
             entity.Property(e => e.Name).HasMaxLength(100);
         });
 

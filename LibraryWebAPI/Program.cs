@@ -5,6 +5,7 @@ using LibraryWebAPI.Services.AuthorService;
 using LibraryWebAPI.Services.AuthService;
 using LibraryWebAPI.Services.BookService;
 using LibraryWebAPI.Services.LibraryService;
+using LibraryWebAPI.Services.UserRoleService;
 using LibraryWebAPI.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ILibraryService, LibraryService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
