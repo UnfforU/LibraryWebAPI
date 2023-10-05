@@ -23,46 +23,45 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Library>>> GetLibraries()
+        public async Task<ActionResult<List<LibraryDTO>>> GetLibraries()
         {
-            return await _libraryService.GetAllLibraries();
+            var result = await _libraryService.GetLibrariesAsync();
+            return Ok(result);
         }
 
         [HttpGet("{libraryId}")]
-        public async Task<ActionResult<Library>> GetLibraryById(Guid libraryId)
+        public async Task<ActionResult<LibraryDTO>> GetLibraryById(Guid libraryId)
         {
-            var result = await _libraryService.GetLibraryById(libraryId);
+            var result = await _libraryService.GetLibraryByIdAsync(libraryId);
             if (result is null)
-                return NotFound("Hero not found.");
+                return NotFound("Library not found.");
 
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Library>> AddLibrary(Library library)
+        public async Task<ActionResult<LibraryDTO>> AddLibrary(LibraryDTO library)
         {
-            var result = await _libraryService.AddLibrary(library);
+            var result = await _libraryService.AddLibraryAsync(library);
             return Ok(result);
         }
 
         [HttpPut("{libraryId}")]
-        public async Task<ActionResult<Library>> UpdateLibrary(Guid libraryId, Library request)
+        public async Task<ActionResult<LibraryDTO>> UpdateLibrary(Guid id, LibraryDTO library)
         {
-            var result = await _libraryService.UpdateLibrary(libraryId, request);
-            if (result is null)
-                return NotFound("Hero not found.");
-
-            return Ok(result);
+            try
+            {
+                var result = await _libraryService.UpdateLibraryAsync(id, library);
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return NotFound("Library not found.");
+            }
         }
 
         [HttpDelete("{libraryId}")]
-        public async Task<ActionResult<List<Library>>> DeleteLibrary(Guid libraryId)
-        {
-            var result = await _libraryService.DeleteLibrary(libraryId);
-            if (result is null)
-                return NotFound("Hero not found.");
-
-            return Ok(result);
-        }
+        public async Task<ActionResult<List<Library>>> DeleteLibrary(Guid libraryId) =>
+            await _libraryService.DeleteLibraryAsync(libraryId) ? NoContent() : NotFound("Library not found.");
     }
 }

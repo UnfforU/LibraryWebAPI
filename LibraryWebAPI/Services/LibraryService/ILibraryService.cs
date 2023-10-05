@@ -4,11 +4,11 @@ namespace LibraryWebAPI.Services.LibraryService
 {
     public interface ILibraryService
     {
-        Task<List<Library>> GetAllLibraries();
-        Task<Library?> GetLibraryById(Guid libraryId);
-        Task<Library?> AddLibrary(Library library);
-        Task<Library?> UpdateLibrary(Guid libraryId, Library request);
-        Task<List<Library>> DeleteLibrary(Guid libraryId);
+        Task<List<LibraryDTO>> GetLibrariesAsync();
+        Task<LibraryDTO> GetLibraryByIdAsync(Guid id);
+        Task<LibraryDTO> AddLibraryAsync(LibraryDTO library);
+        Task<LibraryDTO> UpdateLibraryAsync(Guid id, LibraryDTO library);
+        Task<bool> DeleteLibraryAsync(Guid id);
 
     }
 }

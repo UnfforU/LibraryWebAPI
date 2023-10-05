@@ -9,5 +9,5 @@ public partial class Library
     public string Name { get; set; } = null!;
     public bool IsDeleted { get; set; }
 
-    public virtual ICollection<Book> Books { get; set; } = new List<Book>();
+    public virtual List<Book> Books { get; set; } = new List<Book>();
 }

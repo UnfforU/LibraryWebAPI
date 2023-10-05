@@ -30,8 +30,6 @@ public partial class WebLibraryDbContext : DbContext
         {
             entity.ToTable("Author_Book");
 
-            entity.Property(e => e.AuthorBookId).ValueGeneratedNever();
-
             entity.HasOne(d => d.Author).WithMany(p => p.AuthorBooks)
                 .HasForeignKey(d => d.AuthorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -66,7 +64,6 @@ public partial class WebLibraryDbContext : DbContext
         {
             entity.ToTable("Library");
 
-            entity.Property(e => e.LibraryId).ValueGeneratedNever();
             entity.Property(e => e.Name).HasMaxLength(1000);
         });
 
