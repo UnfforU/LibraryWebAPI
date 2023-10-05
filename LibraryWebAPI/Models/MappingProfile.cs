@@ -10,6 +10,12 @@ namespace LibraryWebAPI.Models
         {
             CreateMap<Author, AuthorDTO>().ReverseMap();
             CreateMap<UserRole, UserRoleDTO>().ReverseMap();
+            CreateMap<Book, BookDTO>().ReverseMap();
+
+            CreateMap<Library, LibraryDTO>()
+                .ForMember(l => l.Books, (opt) => opt.Ignore())
+                .ReverseMap();
+
 
             CreateMap<UserDTO, User>()
                 .ForMember(

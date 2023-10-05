@@ -1,6 +1,7 @@
 
 using LibraryWebAPI.Common;
 using LibraryWebAPI.Models.DB;
+using LibraryWebAPI.Services.AuthorBookService;
 using LibraryWebAPI.Services.AuthorService;
 using LibraryWebAPI.Services.AuthService;
 using LibraryWebAPI.Services.BookService;
@@ -25,6 +26,7 @@ builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IAuthorBookService,  AuthorBookService>();
 builder.Services.AddScoped<ICryptographyHelper, CryptographyHelper>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
