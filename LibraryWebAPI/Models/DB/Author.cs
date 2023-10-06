@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace LibraryWebAPI.Models.DB;
+﻿namespace LibraryWebAPI.Models.DB;
 
 public partial class Author
 {

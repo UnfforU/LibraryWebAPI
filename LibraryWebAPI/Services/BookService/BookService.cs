@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
-using LibraryWebAPI.Models.DB;
 using LibraryWebAPI.Services.AuthorBookService;
 using LibraryWebAPI.Services.AuthorService;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using NuGet.LibraryModel;
-using System.Runtime.CompilerServices;
 
 namespace LibraryWebAPI.Services.BookService
 {

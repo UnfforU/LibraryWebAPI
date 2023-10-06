@@ -1,7 +1,4 @@
-﻿using LibraryWebAPI.Models.DB;
-using Microsoft.AspNetCore.Http.HttpResults;
-
-namespace LibraryWebAPI.Services.AuthorService
+﻿namespace LibraryWebAPI.Services.AuthorService
 {
     public interface IAuthorService
     {

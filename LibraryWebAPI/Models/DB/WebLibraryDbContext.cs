@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-
-namespace LibraryWebAPI.Models.DB;
+﻿namespace LibraryWebAPI.Models.DB;
 
 public partial class WebLibraryDbContext : DbContext
 {

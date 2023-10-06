@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using LibraryWebAPI.Models.DB;
 
 namespace LibraryWebAPI.Services.AuthorService
 {

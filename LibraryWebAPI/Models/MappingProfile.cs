@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using LibraryWebAPI.Models.Extra;
-using System.Drawing.Text;
 
 namespace LibraryWebAPI.Models
 {

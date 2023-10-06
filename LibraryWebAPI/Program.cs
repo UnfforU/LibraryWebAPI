@@ -1,6 +1,3 @@
-
-using LibraryWebAPI.Common;
-using LibraryWebAPI.Models.DB;
 using LibraryWebAPI.Services.AuthorBookService;
 using LibraryWebAPI.Services.AuthorService;
 using LibraryWebAPI.Services.AuthService;

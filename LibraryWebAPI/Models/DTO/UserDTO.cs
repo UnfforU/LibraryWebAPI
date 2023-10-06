@@ -1,6 +1,4 @@
-﻿using LibraryWebAPI.Models.Extra;
-
-namespace LibraryWebAPI.Models.DTO
+﻿namespace LibraryWebAPI.Models.DTO
 {
     public class UserDTO
     {

@@ -1,6 +1,4 @@
-﻿using LibraryWebAPI.Models.DB;
-
-namespace LibraryWebAPI.Services.LibraryService
+﻿namespace LibraryWebAPI.Services.LibraryService
 {
     public interface ILibraryService
     {

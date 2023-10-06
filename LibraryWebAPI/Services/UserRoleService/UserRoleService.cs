@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 
 namespace LibraryWebAPI.Services.UserRoleService
 {

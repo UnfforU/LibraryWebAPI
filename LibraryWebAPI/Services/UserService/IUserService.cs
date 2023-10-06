@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using LibraryWebAPI.Models.DB;
-
-namespace LibraryWebAPI.Services.UserService
+﻿namespace LibraryWebAPI.Services.UserService
 {
     public interface IUserService
     {

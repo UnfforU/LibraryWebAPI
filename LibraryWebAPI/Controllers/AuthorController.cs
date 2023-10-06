@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using LibraryWebAPI.Models.DB;
-using LibraryWebAPI.Services.BookService;
-using LibraryWebAPI.Services.AuthorService;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using LibraryWebAPI.Services.AuthorService;
 
 namespace LibraryWebAPI.Controllers
 {
