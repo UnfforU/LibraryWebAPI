@@ -11,15 +11,12 @@ namespace LibraryWebAPI.Services.BookService
     public class BookService : IBookService
     {
         private readonly WebLibraryDbContext _context;
-       // private readonly IAuthorService _authorService;
         private readonly IAuthorBookService _authorBookService;
         private readonly IMapper _mapper;
-
 
         public BookService(WebLibraryDbContext context, IAuthorService authorService, IMapper mapper, IAuthorBookService authorBookService)
         {
             this._context = context;
-            //this._authorService = authorService;
             this._mapper = mapper;
             this._authorBookService = authorBookService;
         }
@@ -52,7 +49,10 @@ namespace LibraryWebAPI.Services.BookService
             if (updBook is null)
                 throw new Exception("Library not found");
 
-            updBook = _mapper.Map<Book>(book);
+            var updBookMapped = _mapper.Map<Book>(book);
+
+            //Nedded cause i can't updBook by "= _mapper.Map()"
+            _context.Entry(updBook).CurrentValues.SetValues(updBookMapped);
             await _context.SaveChangesAsync();
 
             return _mapper.Map<BookDTO>(updBook);
@@ -65,29 +65,37 @@ namespace LibraryWebAPI.Services.BookService
                 return false;
 
             book.IsDeleted = true;
+
+            //Besides deleted book, i should delete AuthorBooks rows, which connected with deleted book
+            foreach(var a in _context.AuthorBooks.Where(ab => ab.BookId == book.BookId).ToList())
+            {
+                a.IsDeleted = true;
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        } 
+
+        public async Task<bool> DeleteListOfBooksAsync(Guid[] ids)
+        {
+            var books = _context.Books.Where(bs => ids.Contains(bs.BookId)).ToList();
+            if(books.Count != ids.Length)
+            {
+                return false;
+            }
+
+            foreach(var book in books)
+            {
+                book.IsDeleted = true;
+
+                //Besides deleted book, i should delete AuthorBooks rows, which connected with deleted book
+                foreach (var a in _context.AuthorBooks.Where(ab => ab.BookId == book.BookId).ToList())
+                {
+                    a.IsDeleted = true;
+                }
+            }
             await _context.SaveChangesAsync();
             return true;
         }
-
-        //public async Task<BookDTO?> UpdateBook(Guid bookId, BookDTO request)
-        //{
-        //    var book = await _context.Books.FindAsync(bookId);
-        //    if (book is null)
-        //        return null;
-
-        //    book.BookId = request.BookId;
-        //    book.Name = request.Name;
-        //    //book.AuthorId = _context.Authors.First(au => au.Name == request.AuthorName).AuthorId;
-        //    book.Description = request.Description;
-        //    book.IsBooked = request.IsBooked;
-        //    book.OwnerId = request.OwnerId;
-        //    book.BookedDate = request.BookedDate;
-        //    book.LibraryId = request.LibraryId;
-
-        //    _context.Entry(book).State = EntityState.Modified;
-        //    await _context.SaveChangesAsync();
-
-        //    return  request;
-        //}
     }
 }

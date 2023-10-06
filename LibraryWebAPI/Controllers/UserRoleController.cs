@@ -28,10 +28,7 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteUserRole(Guid id)
-        {
-            var isDeleted = _userRoleService.DeleteUserRole(id);
-            return isDeleted ? NoContent() : NotFound();
-        }
+        public IActionResult DeleteUserRole(Guid id) =>
+            _userRoleService.DeleteUserRole(id) ? NoContent() : NotFound();
     }
 }

@@ -28,13 +28,10 @@ namespace LibraryWebAPI.Controllers
             var newAuthor = await _authorService.AddAuthorAsync(author);
             return Ok(newAuthor);
         }
-        
+
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAuthor(Guid id)
-        {
-            var isDeleted = await _authorService.DeleteAuthorAsync(id);
-            return isDeleted ? NoContent() : NotFound();
-        }
+        public async Task<IActionResult> DeleteAuthor(Guid id) =>
+            await _authorService.DeleteAuthorAsync(id) ? NoContent() : NotFound();
 
     }
 }

@@ -29,10 +29,10 @@ namespace LibraryWebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{libraryId}")]
-        public async Task<ActionResult<LibraryDTO>> GetLibraryById(Guid libraryId)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<LibraryDTO>> GetLibraryById(Guid id)
         {
-            var result = await _libraryService.GetLibraryByIdAsync(libraryId);
+            var result = await _libraryService.GetLibraryByIdAsync(id);
             if (result is null)
                 return NotFound("Library not found.");
 
@@ -46,7 +46,7 @@ namespace LibraryWebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{libraryId}")]
+        [HttpPut("{id}")]
         public async Task<ActionResult<LibraryDTO>> UpdateLibrary(Guid id, LibraryDTO library)
         {
             try
@@ -60,8 +60,8 @@ namespace LibraryWebAPI.Controllers
             }
         }
 
-        [HttpDelete("{libraryId}")]
-        public async Task<ActionResult<List<Library>>> DeleteLibrary(Guid libraryId) =>
-            await _libraryService.DeleteLibraryAsync(libraryId) ? NoContent() : NotFound("Library not found.");
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<List<Library>>> DeleteLibrary(Guid id) =>
+            await _libraryService.DeleteLibraryAsync(id) ? NoContent() : NotFound("Library not found.");
     }
 }

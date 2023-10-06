@@ -27,14 +27,19 @@ namespace LibraryWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<UserDTO>> AddUser(UserDTO userDTO)
         {
-            return await _userService.AddUserAsync(userDTO);
+            try
+            {
+                return await _userService.AddUserAsync(userDTO);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(Guid id)
-        {
-            var isDeleted = await _userService.DeleteUserAsync(id);
-            return isDeleted ? NoContent() : NotFound();
-        }
+        public async Task<IActionResult> DeleteUser(Guid id) => 
+            await _userService.DeleteUserAsync(id) ? NoContent() : NotFound();
+    
     }
 }

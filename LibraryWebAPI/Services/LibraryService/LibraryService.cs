@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LibraryWebAPI.Models.DB;
+using LibraryWebAPI.Services.BookService;
 using Microsoft.VisualBasic;
 
 namespace LibraryWebAPI.Services.LibraryService
@@ -8,10 +9,12 @@ namespace LibraryWebAPI.Services.LibraryService
     {
         private readonly WebLibraryDbContext _context;
         private readonly IMapper _mapper;
-        public LibraryService(WebLibraryDbContext context, IMapper mapper)
+        private readonly IBookService _bookService; 
+        public LibraryService(WebLibraryDbContext context, IMapper mapper, IBookService bookService)
         {
             this._context = context;
             this._mapper = mapper;
+            this._bookService = bookService;
         }
 
         public async Task<LibraryDTO> AddLibraryAsync(LibraryDTO library)
@@ -27,10 +30,8 @@ namespace LibraryWebAPI.Services.LibraryService
         public async Task<List<LibraryDTO>> GetLibrariesAsync() =>
             _mapper.Map<List<LibraryDTO>>(await _context.Libraries.ToListAsync());
         
-
         public async Task<LibraryDTO> GetLibraryByIdAsync(Guid id) =>
             _mapper.Map<LibraryDTO>(await _context.Libraries.FindAsync(id));
-
 
         public async Task<LibraryDTO> UpdateLibraryAsync(Guid id, LibraryDTO library)
         {
@@ -38,8 +39,12 @@ namespace LibraryWebAPI.Services.LibraryService
             if (updLibrary is null)
                 throw new Exception("Library not found");
 
-            updLibrary = _mapper.Map<Library>(library);
+            var updLibraryMapped = _mapper.Map<Library>(library);
+
+            //Nedded cause i can't udpLibrary by "= _mapper.Map()"
+            _context.Entry(updLibrary).CurrentValues.SetValues(updLibraryMapped);
             await _context.SaveChangesAsync();
+
 
             return _mapper.Map<LibraryDTO>(updLibrary);
         }
@@ -51,8 +56,15 @@ namespace LibraryWebAPI.Services.LibraryService
                 return false;
 
             library.IsDeleted = true;
-            await _context.SaveChangesAsync();
-            return true;
+            if(await _bookService.DeleteListOfBooksAsync(library.Books.Select(book => book.BookId).ToArray()))
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

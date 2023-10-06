@@ -25,17 +25,20 @@ namespace LibraryWebAPI.Services.AuthorService
 
         public async Task<bool> DeleteAuthorAsync(Guid id)
         {
-            var deletedAuthor = await _context.Authors.FindAsync(id);
-            if(deletedAuthor != null)
-            {
-                _context.Authors.Remove(deletedAuthor);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            else
-            {
+            var author = await _context.Authors.FindAsync(id);
+            if (author is null)
                 return false;
+
+            author.IsDeleted = true;
+
+            //Besides deleted author, i should delete AuthorBooks rows, which connected with deleted author
+            foreach (var a in _context.AuthorBooks.Where(ab => ab.AuthorId == author.AuthorId).ToList())
+            {
+                a.IsDeleted = true;
             }
+
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

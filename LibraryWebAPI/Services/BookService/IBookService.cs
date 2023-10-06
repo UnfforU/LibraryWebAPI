@@ -6,7 +6,8 @@
         Task<BookDTO> AddBookAsync(BookDTO book);
         Task<BookDTO> UpdateBookAsync(Guid id, BookDTO book);
         Task<bool> DeleteBookAsync(Guid id);
+        Task<bool> DeleteListOfBooksAsync(Guid[] ids);
         Task<List<BookDTO>> GetBooksByLibraryIdAsync(Guid libraryId);
-        
+
     }
 }
