@@ -1,5 +1,8 @@
-﻿using LibraryWebAPI.Services.BookService;
+﻿using LibraryWebAPI.Helpers;
+using LibraryWebAPI.Services.BookService;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Primitives;
 
 namespace LibraryWebAPI.Controllers
 {
@@ -9,9 +12,11 @@ namespace LibraryWebAPI.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookService _bookService;
-        public BookController(IBookService bookService)
+        private readonly ICryptographyHelper _cryptoHelper;
+        public BookController(IBookService bookService, ICryptographyHelper cryptographyHelper)
         {
             _bookService = bookService;
+            _cryptoHelper = cryptographyHelper;
         }
 
         [HttpGet("{libraryId}")]
@@ -45,12 +50,34 @@ namespace LibraryWebAPI.Controllers
             }
             catch (Exception)
             {
-                return NotFound("Library not found.");
+                return NotFound("Book not found.");
+            }
+        }
+
+        //"Put" method for subscribe on book with getting userId from JWT token (optional method)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<BookDTO>> SubscribeOnBook(Guid id, BookDTO book)
+        {
+            Request.Headers.TryGetValue("Authorization", out StringValues strv);
+            var jwt = strv.ToString().Split(" ")[1];
+            var claims = _cryptoHelper.DecodeJWT(jwt).Claims;
+
+            var currUserId = claims.First(claim => claim.Type == "sub").Value;
+            book.OwnerId = new Guid(currUserId);
+
+            try
+            {
+                var result = await _bookService.UpdateBookAsync(id, book);
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return NotFound("Book not found.");
             }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBook(Guid id) =>
-            await _bookService.DeleteBookAsync(id) ? NoContent() : NotFound("Library not found.");
+            await _bookService.DeleteBookAsync(id) ? NoContent() : NotFound("Book not found.");
     }
 }

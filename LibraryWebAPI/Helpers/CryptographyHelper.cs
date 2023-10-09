@@ -63,5 +63,7 @@ namespace LibraryWebAPI.Helpers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        public JwtSecurityToken DecodeJWT(string jwtToken) => new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
     }
 }
