@@ -1,9 +1,11 @@
 ﻿using LibraryWebAPI.Services.BookService;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryWebAPI.Controllers
 {
     [Route("/Books")]
     [ApiController]
+    [Authorize]
     public class BookController : ControllerBase
     {
         private readonly IBookService _bookService;
@@ -48,7 +50,7 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<List<Book>>> DeleteBook(Guid id) =>
+        public async Task<IActionResult> DeleteBook(Guid id) =>
             await _bookService.DeleteBookAsync(id) ? NoContent() : NotFound("Library not found.");
     }
 }

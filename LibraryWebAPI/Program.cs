@@ -5,15 +5,35 @@ using LibraryWebAPI.Services.BookService;
 using LibraryWebAPI.Services.LibraryService;
 using LibraryWebAPI.Services.UserRoleService;
 using LibraryWebAPI.Services.UserService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
 builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection("Auth"));
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+var authOptions = builder.Configuration.GetSection("Auth").Get<AuthOptions>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = authOptions.Issuer,
+
+            ValidateAudience = true,
+            ValidAudience = authOptions.Audience,
+
+            ValidateLifetime = true,
+
+            IssuerSigningKey = authOptions.GetSymmetricSecurityKey(),
+            ValidateIssuerSigningKey = true,
+        };
+    });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -27,6 +47,7 @@ builder.Services.AddScoped<IAuthorBookService,  AuthorBookService>();
 builder.Services.AddScoped<ICryptographyHelper, CryptographyHelper>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 
 builder.Services.AddDbContext<WebLibraryDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
@@ -52,6 +73,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

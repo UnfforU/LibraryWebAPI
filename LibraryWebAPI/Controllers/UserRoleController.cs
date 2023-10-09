@@ -1,9 +1,11 @@
 ﻿using LibraryWebAPI.Services.UserRoleService;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryWebAPI.Controllers
 {
     [Route("/UserRoles")]
     [ApiController]
+    [Authorize]
     public class UserRoleController : ControllerBase
     {
         private readonly IUserRoleService _userRoleService;

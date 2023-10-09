@@ -1,9 +1,12 @@
-﻿using LibraryWebAPI.Services.AuthorService;
+﻿using AutoMapper;
+using LibraryWebAPI.Services.AuthorService;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryWebAPI.Controllers
 {
     [Route("/Authors")]
     [ApiController]
+    [Authorize]
     public class AuthorController : ControllerBase
     {
         private readonly IAuthorService _authorService;

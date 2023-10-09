@@ -1,4 +1,5 @@
 ﻿using LibraryWebAPI.Services.UserService;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryWebAPI.Controllers
 {
@@ -25,6 +26,7 @@ namespace LibraryWebAPI.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id) => 
             await _userService.DeleteUserAsync(id) ? NoContent() : NotFound();

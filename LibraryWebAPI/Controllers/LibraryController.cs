@@ -1,9 +1,13 @@
-﻿using LibraryWebAPI.Services.LibraryService;
+﻿using LibraryWebAPI.Models.DB;
+using LibraryWebAPI.Models.Extra;
+using LibraryWebAPI.Services.LibraryService;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryWebAPI.Controllers
 {
     [Route("/Libraries")]
     [ApiController]
+    [Authorize]
     public class LibraryController : ControllerBase
     {
         private readonly ILibraryService _libraryService;
@@ -51,7 +55,7 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<List<Library>>> DeleteLibrary(Guid id) =>
+        public async Task<IActionResult> DeleteLibrary(Guid id) =>
             await _libraryService.DeleteLibraryAsync(id) ? NoContent() : NotFound("Library not found.");
     }
 }
