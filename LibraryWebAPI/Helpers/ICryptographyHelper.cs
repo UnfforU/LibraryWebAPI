@@ -1,5 +1,6 @@
 ﻿using NuGet.Common;
 using System.IdentityModel.Tokens.Jwt;
+using LibraryWebAPI.Models.DB;
 
 namespace LibraryWebAPI.Helpers
 {

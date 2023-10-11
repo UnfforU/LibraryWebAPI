@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LibraryWebAPI.Models.DB;
 
 namespace LibraryWebAPI.Models
 {

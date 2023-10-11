@@ -1,5 +1,6 @@
 ﻿namespace LibraryWebAPI.Services.UserService
 {
+    using LibraryWebAPI.Models.DB;
     public interface IUserService
     {
         Task<List<UserDTO>> GetUsersAsync();

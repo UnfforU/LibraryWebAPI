@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LibraryWebAPI.Services.AuthorBookService;
 using LibraryWebAPI.Services.AuthorService;
+using LibraryWebAPI.Models.DB;
 
 namespace LibraryWebAPI.Services.BookService
 {

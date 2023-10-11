@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using LibraryWebAPI.Models.DB;
+using LibraryWebAPI.Helpers;
 
 namespace LibraryWebAPI.Services.UserService
 {

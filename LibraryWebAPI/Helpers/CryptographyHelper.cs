@@ -4,6 +4,9 @@ using System.Security.Cryptography;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
+using LibraryWebAPI.Models.DB;
+using LibraryWebAPI.Common;
+
 namespace LibraryWebAPI.Helpers
 {
     public class CryptographyHelper : ICryptographyHelper

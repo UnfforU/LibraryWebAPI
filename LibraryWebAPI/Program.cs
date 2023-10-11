@@ -6,6 +6,11 @@ using LibraryWebAPI.Services.LibraryService;
 using LibraryWebAPI.Services.OrderService;
 using LibraryWebAPI.Services.UserRoleService;
 using LibraryWebAPI.Services.UserService;
+using LibraryWebAPI.Models.DB;
+using LibraryWebAPI.Common;
+using LibraryWebAPI.Helpers;
+
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
