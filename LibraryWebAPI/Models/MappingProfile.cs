@@ -9,6 +9,23 @@ namespace LibraryWebAPI.Models
             CreateMap<Author, AuthorDTO>().ReverseMap();
             CreateMap<UserRole, UserRoleDTO>().ReverseMap();
             CreateMap<Book, BookDTO>().ReverseMap();
+            //CreateMap<Order, OrderDTO>()
+            //    .ForPath(
+            //        o => DateTime.Parse(o.StartDateTime),
+            //        opt => opt.MapFrom(u => u.StartDateTime))
+            //    .ForPath(
+            //        o => DateTime.Parse(o.EndDateTime),
+            //        opt => opt.MapFrom(u => u.EndDateTime));
+
+            //CreateMap<OrderDTO, Order>()
+            //    .ForMember(
+            //        odto => odto.StartDateTime.ToString(),
+            //        opt => opt.MapFrom(u => u.StartDateTime))
+            //    .ForMember(
+            //        odto => odto.EndDateTime.ToString(),
+            //        opt => opt.MapFrom(u => u.EndDateTime));
+
+            CreateMap<Order, OrderDTO>().ReverseMap();
 
             CreateMap<Library, LibraryDTO>()
                 .ForMember(l => l.Books, (opt) => opt.Ignore())

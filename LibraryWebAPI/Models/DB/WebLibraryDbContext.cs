@@ -10,6 +10,7 @@ public partial class WebLibraryDbContext : DbContext
     public virtual DbSet<AuthorBook> AuthorBooks { get; set; }
     public virtual DbSet<Book> Books { get; set; }
     public virtual DbSet<Library> Libraries { get; set; }
+    public virtual DbSet<Order> Orders { get; set; }
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
@@ -52,10 +53,6 @@ public partial class WebLibraryDbContext : DbContext
                 .HasForeignKey(d => d.LibraryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Book_Library");
-
-            entity.HasOne(d => d.Owner).WithMany(p => p.Books)
-                .HasForeignKey(d => d.OwnerId)
-                .HasConstraintName("FK_Book_User");
         });
 
         modelBuilder.Entity<Library>(entity =>
@@ -64,6 +61,22 @@ public partial class WebLibraryDbContext : DbContext
             entity.HasQueryFilter(library => EF.Property<bool>(library, "IsDeleted") == false);
 
             entity.Property(e => e.Name).HasMaxLength(1000);
+        });
+
+        modelBuilder.Entity<Order>(entity =>
+        {
+            entity.ToTable("Order");
+            entity.HasQueryFilter(author => EF.Property<bool>(author, "IsDeleted") == false);
+
+            entity.HasOne(d => d.Book).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.BookId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Order_Book");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Order_User");
         });
 
         modelBuilder.Entity<User>(entity =>
