@@ -8,11 +8,8 @@ public partial class Book
     public byte[]? Cover { get; set; }
     public Guid LibraryId { get; set; }
     public bool IsDeleted { get; set; }
-    public Guid? OwnerId { get; set; }
-    public DateTime? BookedDate { get; set; }
-    public bool IsBooked { get; set; }
 
     public virtual List<AuthorBook> AuthorBooks { get; set; } = new List<AuthorBook>();
     public virtual Library Library { get; set; } = null!;
-    public virtual User? Owner { get; set; }
+    public virtual List<Order> Orders { get; set; } = new List<Order>();
 }

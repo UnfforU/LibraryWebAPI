@@ -13,6 +13,13 @@ namespace LibraryWebAPI.Controllers
             _userService = userService;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<UserDTO>>> GetUsers()
+        {
+            var result = await _userService.GetUsersAsync();
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<ActionResult<UserDTO>> AddUser(UserDTO userDTO)
         {

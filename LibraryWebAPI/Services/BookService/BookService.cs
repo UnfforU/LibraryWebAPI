@@ -19,10 +19,11 @@ namespace LibraryWebAPI.Services.BookService
 
         public async Task<BookDTO> AddBookAsync(BookDTO book)
         {
-            var newBook = _mapper.Map<Book>(book); 
+            var newBook = _mapper.Map<Book>(book);
+            //newBook.OwnerId = null;
 
             _context.Books.Add(newBook);
-            foreach(var author in book.Authors)
+            foreach (var author in book.Authors)
             {
                 _context.AuthorBooks.Add(new AuthorBook() { AuthorId = author.AuthorId, BookId = newBook.BookId });
             }
@@ -36,12 +37,27 @@ namespace LibraryWebAPI.Services.BookService
         public async Task<BookDTO?> GetBookByIdAsync(Guid id) =>
             _mapper.Map<BookDTO>(await _context.Books.FindAsync(id));
 
-        public async Task<List<BookDTO>> GetBooksByLibraryIdAsync(Guid libraryId) =>
-            _mapper.Map<List<BookDTO>>(await _context.Books.Where(b => b.LibraryId == libraryId).ToListAsync());
+        public async Task<List<BookDTO>> GetBooksByLibraryIdAsync(Guid libraryId) 
+        {
+            var booksList = _mapper.Map<List<BookDTO>>(await _context.Books.Include(b => b.Orders).Where(b => b.LibraryId == libraryId).ToListAsync());
+
+            //var a = ;
+
+            //var b = from b in _context.Books.Include(b => b.AuthorBooks).Where(b => b.LibraryId == libraryId)
+            //        join a in 
+
+            //var result = booksList.Join()
+            foreach(var book in booksList)
+            {
+                book.Authors = await _authorBookService.GetAuthorsByBookIdAsync(book.BookId);
+            }
+            return booksList;
+        }
+            
 
         public async Task<BookDTO> UpdateBookAsync(Guid id, BookDTO book)
         {
-            var updBook = await _context.Books.FindAsync(id);
+            var updBook = _context.Books.Include(b => b.AuthorBooks).FirstOrDefault(b => b.BookId == id);
             if (updBook is null)
                 throw new Exception("Library not found");
 
@@ -56,17 +72,19 @@ namespace LibraryWebAPI.Services.BookService
 
         public async Task<bool> DeleteBookAsync(Guid id)
         {
-            var book = await _context.Books.FindAsync(id);
+            var book = _context.Books.Include(b => b.AuthorBooks).Include(b => b.Orders).FirstOrDefault(b => b.BookId == id);
             if (book is null)
                 return false;
 
             book.IsDeleted = true;
+            book.Orders.ForEach(o => o.IsDeleted = true);
+            book.AuthorBooks.ForEach(ab => ab.IsDeleted = true);
 
             //Besides deleted book, i should delete AuthorBooks rows, which connected with deleted book
-            foreach(var a in _context.AuthorBooks.Where(ab => ab.BookId == book.BookId).ToList())
-            {
-                a.IsDeleted = true;
-            }
+            //foreach(var a in _context.AuthorBooks.Where(ab => ab.BookId == book.BookId).ToList())
+            //{
+            //    a.IsDeleted = true;
+            //}
 
             await _context.SaveChangesAsync();
             return true;

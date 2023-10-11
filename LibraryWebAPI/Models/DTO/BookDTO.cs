@@ -8,9 +8,8 @@
         public string? Description { get; set; }
         public byte[]? Cover { get; set; }
         public Guid LibraryId { get; set; }
-        public bool IsBooked { get; set; }
-        public Guid? OwnerId { get; set; } = Guid.Empty;
-        public DateTime? BookedDate { get; set; }
+
+        public List<OrderDTO> Orders { get; set; } = new();
 
     }
 }

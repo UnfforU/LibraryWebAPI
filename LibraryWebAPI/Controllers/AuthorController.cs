@@ -15,6 +15,13 @@ namespace LibraryWebAPI.Controllers
             _authorService = authorService;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<LibraryDTO>>> GetAuthorList()
+        {
+            var result = await _authorService.GetAuthorListAsync();
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<ActionResult<AuthorDTO>> AddAuthor(AuthorDTO author)
         {

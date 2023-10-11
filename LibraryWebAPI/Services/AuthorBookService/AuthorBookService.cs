@@ -13,7 +13,12 @@ namespace LibraryWebAPI.Services.AuthorBookService
         }
         public async Task<List<AuthorDTO>> GetAuthorsByBookIdAsync(Guid bookId)
         {
-            var result = await _context.AuthorBooks.Where(ab => ab.BookId == bookId).ToListAsync();
+            var authorBooksList = await _context.AuthorBooks.Include(ab => ab.Author).Where(ab => ab.BookId == bookId).ToListAsync();
+            var result = new List<AuthorDTO>();
+            foreach (var author in authorBooksList)
+            {
+               result.Add(_mapper.Map<AuthorDTO>(author.Author));    
+            }
             return _mapper.Map<List<AuthorDTO>>(result);
         }
 

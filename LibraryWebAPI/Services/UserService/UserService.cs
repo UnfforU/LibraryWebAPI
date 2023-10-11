@@ -14,6 +14,9 @@ namespace LibraryWebAPI.Services.UserService
             this._mapper = mapper;
         }
 
+        public async Task<List<UserDTO>> GetUsersAsync() =>
+            _mapper.Map<List<UserDTO>>(await _context.Users.ToListAsync());
+
         public async Task<UserDTO> AddUserAsync(UserDTO user)
         {
             if (IsUserExist(user.UserName))

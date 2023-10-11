@@ -29,10 +29,10 @@ namespace LibraryWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<BookDTO>> AddBook(BookDTO book)
         {
-            await _bookService.AddBookAsync(book);
-            if (book != null)
+            var newBook = await _bookService.AddBookAsync(book);
+            if (newBook != null)
             {
-                return Ok(book);
+                return Ok(newBook);
             }
             else
             {
@@ -54,27 +54,27 @@ namespace LibraryWebAPI.Controllers
             }
         }
 
-        //"Put" method for subscribe on book with getting userId from JWT token (optional method)
-        [HttpPut("{id}")]
-        public async Task<ActionResult<BookDTO>> SubscribeOnBook(Guid id, BookDTO book)
-        {
-            Request.Headers.TryGetValue("Authorization", out StringValues strv);
-            var jwt = strv.ToString().Split(" ")[1];
-            var claims = _cryptoHelper.DecodeJWT(jwt).Claims;
+        //"Put" method for subscribe on book with getting userId from JWT token(optional method)
+        //[HttpPut]
+        //public async Task<ActionResult<BookDTO>> SubscribeOnBook(Guid id, BookDTO book)
+        //{
+        //    Request.Headers.TryGetValue("Authorization", out StringValues strv);
+        //    var jwt = strv.ToString().Split(" ")[1];
+        //    var claims = _cryptoHelper.DecodeJWT(jwt).Claims;
 
-            var currUserId = claims.First(claim => claim.Type == "sub").Value;
-            book.OwnerId = new Guid(currUserId);
+        //    var currUserId = claims.First(claim => claim.Type == "sub").Value;
+        //    book.OwnerId = new Guid(currUserId);
 
-            try
-            {
-                var result = await _bookService.UpdateBookAsync(id, book);
-                return Ok(result);
-            }
-            catch (Exception)
-            {
-                return NotFound("Book not found.");
-            }
-        }
+        //    try
+        //    {
+        //        var result = await _bookService.UpdateBookAsync(id, book);
+        //        return Ok(result);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return NotFound("Book not found.");
+        //    }
+        //}
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBook(Guid id) =>

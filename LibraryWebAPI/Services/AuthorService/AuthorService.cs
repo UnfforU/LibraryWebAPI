@@ -12,6 +12,8 @@ namespace LibraryWebAPI.Services.AuthorService
             this._mapper = mapper;
         }
 
+        public async Task<List<AuthorDTO>> GetAuthorListAsync()
+            => _mapper.Map<List<AuthorDTO>>(await _context.Authors.ToListAsync());
         public async Task<AuthorDTO> AddAuthorAsync(AuthorDTO author)
         {
             var newAuthor = _mapper.Map<Author>(author);

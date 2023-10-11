@@ -9,6 +9,6 @@ public partial class User
     public byte UserRoleId { get; set; }
     public bool IsDeleted { get; set; }
 
-    public virtual ICollection<Book> Books { get; set; } = new List<Book>();
+    public virtual List<Order> Orders { get; set; } = new List<Order>();
     public virtual UserRole UserRole { get; set; } = null!;
 }
