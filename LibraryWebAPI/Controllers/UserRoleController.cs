@@ -15,6 +15,7 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult<UserRoleDTO> AddUserRole(UserRoleDTO userRole)
         {
             var newUserRole = _userRoleService.AddUserRole(userRole);
@@ -22,6 +23,7 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteUserRole(Guid id) =>
             _userRoleService.DeleteUserRole(id) ? NoContent() : NotFound();
     }

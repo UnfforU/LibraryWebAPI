@@ -16,6 +16,7 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<List<LibraryDTO>>> GetAuthorList()
         {
             var result = await _authorService.GetAuthorListAsync();
@@ -23,6 +24,7 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<AuthorDTO>> AddAuthor(AuthorDTO author)
         {
             var newAuthor = await _authorService.AddAuthorAsync(author);
@@ -30,6 +32,7 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAuthor(Guid id) =>
             await _authorService.DeleteAuthorAsync(id) ? NoContent() : NotFound();
 

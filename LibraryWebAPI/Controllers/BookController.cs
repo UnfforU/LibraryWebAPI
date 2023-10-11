@@ -20,6 +20,7 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpGet("{libraryId}")]
+        [Authorize]
         public async Task<ActionResult<List<BookDTO>>> GetBooksByLibraryId(Guid libraryId)
         {
             var result = await _bookService.GetBooksByLibraryIdAsync(libraryId);
@@ -27,6 +28,7 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<BookDTO>> AddBook(BookDTO book)
         {
             var newBook = await _bookService.AddBookAsync(book);
@@ -41,6 +43,7 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<BookDTO>> UpdateBook(Guid id, BookDTO book)
         {
             try
@@ -77,6 +80,7 @@ namespace LibraryWebAPI.Controllers
         //}
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteBook(Guid id) =>
             await _bookService.DeleteBookAsync(id) ? NoContent() : NotFound("Book not found.");
     }

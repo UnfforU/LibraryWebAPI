@@ -14,6 +14,7 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<UserDTO>>> GetUsers()
         {
             var result = await _userService.GetUsersAsync();
@@ -21,6 +22,7 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<UserDTO>> AddUser(UserDTO userDTO)
         {
             try
@@ -33,8 +35,8 @@ namespace LibraryWebAPI.Controllers
             }
         }
 
-        [Authorize]
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUser(Guid id) => 
             await _userService.DeleteUserAsync(id) ? NoContent() : NotFound();
     

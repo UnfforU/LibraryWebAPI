@@ -17,6 +17,7 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<List<LibraryDTO>>> GetLibraries()
         {
             var result = await _libraryService.GetLibrariesAsync();
@@ -24,6 +25,7 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<LibraryDTO>> GetLibraryById(Guid id)
         {
             var result = await _libraryService.GetLibraryByIdAsync(id);
@@ -34,12 +36,14 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<LibraryDTO>> AddLibrary(LibraryDTO library)
         {
             var result = await _libraryService.AddLibraryAsync(library);
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<ActionResult<LibraryDTO>> UpdateLibrary(Guid id, LibraryDTO library)
         {
@@ -54,6 +58,7 @@ namespace LibraryWebAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLibrary(Guid id) =>
             await _libraryService.DeleteLibraryAsync(id) ? NoContent() : NotFound("Library not found.");

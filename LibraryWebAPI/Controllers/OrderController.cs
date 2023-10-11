@@ -15,6 +15,7 @@ namespace LibraryWebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "DefaultUser")]
         public async Task<ActionResult<OrderDTO>> AddOrder(OrderDTO order)
         {
             var result = await _orderService.AddOrderAsync(order);
