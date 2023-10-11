@@ -53,11 +53,7 @@ namespace LibraryWebAPI.Services.UserService
                     .Include(u => u.UserRole)
                     .SingleOrDefault(u => u.UserName == login.UserName && !u.IsDeleted);
  
-            if (potencialUser == null)
-            {
-                return potencialUser;
-            }
-            else if (potencialUser.Password == _cryptoHelper.ComputeSHA256(login.Password, potencialUser.Salt)) 
+            if (potencialUser != null && potencialUser.Password == _cryptoHelper.ComputeSHA256(login.Password, potencialUser.Salt)) 
             {
                 return potencialUser;
             }

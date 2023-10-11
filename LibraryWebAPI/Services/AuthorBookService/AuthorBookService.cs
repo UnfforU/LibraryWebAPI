@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using LibraryWebAPI.Models.DB;
+using LibraryWebAPI.Models.DB; 
 
 namespace LibraryWebAPI.Services.AuthorBookService
 {
@@ -16,10 +16,10 @@ namespace LibraryWebAPI.Services.AuthorBookService
         {
             var authorBooksList = await _context.AuthorBooks.Include(ab => ab.Author).Where(ab => ab.BookId == bookId).ToListAsync();
             var result = new List<AuthorDTO>();
-            foreach (var author in authorBooksList)
-            {
-               result.Add(_mapper.Map<AuthorDTO>(author.Author));    
-            }
+            authorBooksList.ForEach(authorBook => 
+                result.Add(_mapper.Map<AuthorDTO>(authorBook.Author))
+                );
+
             return _mapper.Map<List<AuthorDTO>>(result);
         }
 

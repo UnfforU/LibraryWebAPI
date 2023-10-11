@@ -34,11 +34,8 @@ namespace LibraryWebAPI.Services.AuthorService
             author.IsDeleted = true;
 
             //Besides deleted author, i should delete AuthorBooks rows, which connected with deleted author
-            foreach (var a in _context.AuthorBooks.Where(ab => ab.AuthorId == author.AuthorId).ToList())
-            {
-                a.IsDeleted = true;
-            }
-
+            _context.AuthorBooks.Where(ab => ab.AuthorId == author.AuthorId).ToList().ForEach(a => a.IsDeleted = true);
+           
             await _context.SaveChangesAsync();
             return true;
         }

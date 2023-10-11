@@ -21,13 +21,10 @@ namespace LibraryWebAPI.Services.BookService
         public async Task<BookDTO> AddBookAsync(BookDTO book)
         {
             var newBook = _mapper.Map<Book>(book);
-            //newBook.OwnerId = null;
-
             _context.Books.Add(newBook);
-            foreach (var author in book.Authors)
-            {
-                _context.AuthorBooks.Add(new AuthorBook() { AuthorId = author.AuthorId, BookId = newBook.BookId });
-            }
+            book.Authors.ForEach(author =>
+                _context.AuthorBooks.Add(new AuthorBook() { AuthorId = author.AuthorId, BookId = newBook.BookId }));
+
             await _context.SaveChangesAsync();
 
             var newBookDTO = _mapper.Map<BookDTO>(newBook);
@@ -40,14 +37,11 @@ namespace LibraryWebAPI.Services.BookService
 
         public async Task<List<BookDTO>> GetBooksByLibraryIdAsync(Guid libraryId) 
         {
-            var booksList = _mapper.Map<List<BookDTO>>(await _context.Books.Include(b => b.Orders).Where(b => b.LibraryId == libraryId).ToListAsync());
+            var booksList = _mapper.Map<List<BookDTO>>(
+                await _context.Books.Include(b => b.Orders)
+                                    .Where(b => b.LibraryId == libraryId)
+                                    .ToListAsync());
 
-            //var a = ;
-
-            //var b = from b in _context.Books.Include(b => b.AuthorBooks).Where(b => b.LibraryId == libraryId)
-            //        join a in 
-
-            //var result = booksList.Join()
             foreach(var book in booksList)
             {
                 book.Authors = await _authorBookService.GetAuthorsByBookIdAsync(book.BookId);
@@ -60,11 +54,11 @@ namespace LibraryWebAPI.Services.BookService
         {
             var updBook = _context.Books.Include(b => b.AuthorBooks).FirstOrDefault(b => b.BookId == id);
             if (updBook is null)
-                throw new Exception("Library not found");
+                return _mapper.Map<BookDTO>(updBook);
 
             var updBookMapped = _mapper.Map<Book>(book);
 
-            //Nedded cause i can't updBook by "= _mapper.Map()"
+           
             _context.Entry(updBook).CurrentValues.SetValues(updBookMapped);
             await _context.SaveChangesAsync();
 
@@ -73,7 +67,11 @@ namespace LibraryWebAPI.Services.BookService
 
         public async Task<bool> DeleteBookAsync(Guid id)
         {
-            var book = _context.Books.Include(b => b.AuthorBooks).Include(b => b.Orders).FirstOrDefault(b => b.BookId == id);
+            var book = _context.Books
+                .Include(b => b.AuthorBooks)
+                .Include(b => b.Orders)
+                .FirstOrDefault(b => b.BookId == id);
+
             if (book is null)
                 return false;
 
@@ -81,34 +79,26 @@ namespace LibraryWebAPI.Services.BookService
             book.Orders.ForEach(o => o.IsDeleted = true);
             book.AuthorBooks.ForEach(ab => ab.IsDeleted = true);
 
-            //Besides deleted book, i should delete AuthorBooks rows, which connected with deleted book
-            //foreach(var a in _context.AuthorBooks.Where(ab => ab.BookId == book.BookId).ToList())
-            //{
-            //    a.IsDeleted = true;
-            //}
-
             await _context.SaveChangesAsync();
             return true;
         } 
 
         public async Task<bool> DeleteListOfBooksAsync(Guid[] ids)
         {
-            var books = _context.Books.Where(bs => ids.Contains(bs.BookId)).ToList();
+            var books = _context.Books.Where(bs => ids.Contains(bs.BookId))
+                    .ToList();
             if(books.Count != ids.Length)
             {
                 return false;
             }
 
-            foreach(var book in books)
-            {
+            books.ForEach(book => {
                 book.IsDeleted = true;
+                _context.AuthorBooks.Where(ab => ab.BookId == book.BookId)
+                                    .ToList()
+                                    .ForEach(ab => ab.IsDeleted = true);
+                });
 
-                //Besides deleted book, i should delete AuthorBooks rows, which connected with deleted book
-                foreach (var a in _context.AuthorBooks.Where(ab => ab.BookId == book.BookId).ToList())
-                {
-                    a.IsDeleted = true;
-                }
-            }
             await _context.SaveChangesAsync();
             return true;
         }
