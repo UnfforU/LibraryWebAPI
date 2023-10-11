@@ -32,52 +32,20 @@ namespace LibraryWebAPI.Controllers
         public async Task<ActionResult<BookDTO>> AddBook(BookDTO book)
         {
             var newBook = await _bookService.AddBookAsync(book);
-            if (newBook != null)
-            {
-                return Ok(newBook);
-            }
-            else
-            {
-                return BadRequest();
-            }
+            return Ok(newBook);
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<BookDTO>> UpdateBook(Guid id, BookDTO book)
         {
-            try
-            {
-                var result = await _bookService.UpdateBookAsync(id, book);
+            var result = await _bookService.UpdateBookAsync(id, book);
+            if(result is not null)
                 return Ok(result);
-            }
-            catch (Exception)
-            {
-                return NotFound("Book not found.");
-            }
+            else
+                return BadRequest("Can't update book.");
+
         }
-
-        //"Put" method for subscribe on book with getting userId from JWT token(optional method)
-        //[HttpPut]
-        //public async Task<ActionResult<BookDTO>> SubscribeOnBook(Guid id, BookDTO book)
-        //{
-        //    Request.Headers.TryGetValue("Authorization", out StringValues strv);
-        //    var jwt = strv.ToString().Split(" ")[1];
-        //    var claims = _cryptoHelper.DecodeJWT(jwt).Claims;
-
-        //    var currUserId = claims.First(claim => claim.Type == "sub").Value;
-        //    book.OwnerId = new Guid(currUserId);
-
-        //    try
-        //    {
-        //        var result = await _bookService.UpdateBookAsync(id, book);
-        //        return Ok(result);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return NotFound("Book not found.");
-        //    }
-        //}
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]

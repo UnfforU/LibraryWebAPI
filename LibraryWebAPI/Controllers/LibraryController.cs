@@ -47,14 +47,14 @@ namespace LibraryWebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<LibraryDTO>> UpdateLibrary(Guid id, LibraryDTO library)
         {
-            try
+            var result = await _libraryService.UpdateLibraryAsync(id, library);
+            if (result is not null)
             {
-                var result = await _libraryService.UpdateLibraryAsync(id, library);
                 return Ok(result);
             }
-            catch (Exception)
+            else
             {
-                return NotFound("Library not found.");
+                return BadRequest("Can't update library.");
             }
         }
 

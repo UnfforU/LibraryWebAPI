@@ -25,13 +25,14 @@ namespace LibraryWebAPI.Controllers
         [Authorize]
         public async Task<ActionResult<UserDTO>> AddUser(UserDTO userDTO)
         {
-            try
+            var result = await _userService.AddUserAsync(userDTO);
+            if (result is not null)
             {
-                return await _userService.AddUserAsync(userDTO);
+                return Ok(result);
             }
-            catch (Exception ex)
+            else
             {
-                return BadRequest(ex.Message);
+                return BadRequest();
             }
         }
 
