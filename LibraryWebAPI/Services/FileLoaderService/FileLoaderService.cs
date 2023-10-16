@@ -21,18 +21,12 @@ namespace LibraryWebAPI.Services.FileLoaderService
             using (var ms = new MemoryStream())
             {
                 await file.CopyToAsync(ms);
-             
-                var fileBytes = ms.GetBuffer();
-                var a = file.ContentType;
-              
-                
-
                 Models.DB.File newFile = new()
                 {
                     FileId = Guid.NewGuid(),
                     FileName = file.FileName,
                     ContentType = file.ContentType,
-                    FileContent = fileBytes,
+                    FileContent = ms.GetBuffer(),
                     BookId = null
                 };
 
@@ -44,11 +38,8 @@ namespace LibraryWebAPI.Services.FileLoaderService
 
         public async Task<FileDTO> GetFileByBookId(Guid bookId)
         {
-            var outputFile = _context.Files.FirstOrDefault(f => f.BookId == bookId);
+            var outputFile = await _context.Files.FirstOrDefaultAsync(f => f.BookId == bookId);
             var a = 12;
-
-            //var newLibrary = ;
-            //var res = Convert.ToBase64String(fileBytes);
 
             return _mapper.Map<FileDTO>(outputFile);
         }
