@@ -9,6 +9,7 @@ public partial class WebLibraryDbContext : DbContext
     public virtual DbSet<Author> Authors { get; set; }
     public virtual DbSet<AuthorBook> AuthorBooks { get; set; }
     public virtual DbSet<Book> Books { get; set; }
+    public virtual DbSet<File> Files { get; set; }
     public virtual DbSet<Library> Libraries { get; set; }
     public virtual DbSet<Order> Orders { get; set; }
     public virtual DbSet<User> Users { get; set; }
@@ -49,10 +50,22 @@ public partial class WebLibraryDbContext : DbContext
             entity.Property(e => e.Description).HasMaxLength(2000);
             entity.Property(e => e.Name).HasMaxLength(50);
 
+
             entity.HasOne(d => d.Library).WithMany(p => p.Books)
                 .HasForeignKey(d => d.LibraryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Book_Library");
+        });
+
+        modelBuilder.Entity<File>(entity =>
+        {
+            entity.ToTable("File");
+
+            entity.Property(e => e.FileName).HasMaxLength(1000);
+
+            entity.HasOne(d => d.Book).WithMany(p => p.Files)
+                .HasForeignKey(d => d.BookId)
+                .HasConstraintName("FK_File_Book");
         });
 
         modelBuilder.Entity<Library>(entity =>

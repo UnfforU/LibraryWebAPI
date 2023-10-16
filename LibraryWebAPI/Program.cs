@@ -12,6 +12,7 @@ using LibraryWebAPI.Helpers;
 
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using LibraryWebAPI.Services.FileLoaderService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +50,7 @@ builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IFileLoaderService, FileLoaderService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IAuthorBookService,  AuthorBookService>();
 builder.Services.AddScoped<ICryptographyHelper, CryptographyHelper>();
